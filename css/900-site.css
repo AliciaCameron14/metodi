@@ -1,0 +1,67 @@
+/*Classes*/
+
+.menu {
+    padding-top: 20px;
+}
+
+.form-control {
+    border-radius: 0px;
+}
+
+.caret {
+    margin-right: 10px;
+}
+
+.nav-tabs>li {
+    float: none; !important
+}
+
+.nav>li {
+    display: inline-block; !important
+}
+
+.block {
+    display: table;
+    margin-bottom: 20px;
+    height: 100px;
+    width: 25%;
+}
+
+.block p:hover {
+    background-color: #f23737;
+    color: black;
+}
+
+.block p {
+    display: table-cell; 
+    vertical-align: middle;
+     border-radius: 15px;
+    border: 1px solid black;
+       padding: 10px;
+
+}
+
+
+/*Elements*/
+
+label {
+    line-height: 2.5;
+}
+
+a {
+    color: inherit; !important
+}
+
+/*Media Queries*/
+@media (max-width: 1200px) {
+    .block {
+        width: 100%;
+    }
+}
+
+/*
+@media (min-width:800px) and (max-width: 1200px) {
+    .block {
+        width: 50%;
+    }
+}*/
