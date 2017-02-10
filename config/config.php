@@ -1,4 +1,4 @@
-<?php 
+<?php
 define('LOCAL_MODE', 1);
 
 if (defined('LOCAL_MODE'))
@@ -23,8 +23,8 @@ if (defined('LOCAL_MODE'))
 //$config['log_errors'] = TRUE;
 //$config['kill_magic_quotes'] = TRUE;
 //$config['helpers'] = array('user', 'file');
-//$config['default_controller'] = 'login';
-//$config['default_action'] = 'index';
+// $config['default_controller'] = 'user';
+// $config['default_action'] = 'index';
 //$config['default_lang_id'] = 'nl';
 
 

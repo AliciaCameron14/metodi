@@ -1,36 +1,41 @@
 app.config(['$routeSegmentProvider', '$routeProvider', '$locationProvider', function ($routeSegmentProvider, $routeProvider, $locationProvider)
     {
         $routeSegmentProvider
-//        .when('/start','start')
-            .when('/start/requirements', 'start.requirements')
-            .when('/start/functionalities', 'start.functionalities')
-            .when('/start/basis', 'start.basis')
-            .when('/start/example', 'start.example')
+      //  .when('/','requirements')
+            .when('/requirements', 'requirements')
+            .when('/requirements/functionalities', 'requirements.functionalities')
+            .when('/requirements/functionalities/basis', 'requirements.functionalities.basis')
+            .when('/requirements/functionalities/basis/example', 'requirements.functionalities.basis.example')
             .when('/search', 'search')
             .when('/topics', 'topics')
-
-        .segment('start', {
-              templateUrl: './views/start/step1_requirements.php',
-                controller: 'requirementsController'
-        })
-            .within()
+            // .segment('functionalities', {
+            //     templateUrl: './views/start/step2_functionalities.php',
+            //     controller: 'mainController'
+            // })
+        // .segment('start', {
+        //   templateUrl: './views/start/step1_requirements.html',
+        //     controller: 'mainController'
+        // })
+        //     .within()
             .segment('requirements', {
-                templateUrl: './views/start/step1_requirements.php',
-                controller: 'requirementsController'
+                templateUrl: './views/start/main.html',
+                controller: 'mainController'
+
             })
+            .within()
             .segment('functionalities', {
-                templateUrl: './views/start/step2_functionalities.php',
-                controller: 'functionalitiesController'
-            })
+                // templateUrl: './views/start/step2_functionalities.html'
+                // controller: 'mainController'
+            }).within()
             .segment('basis', {
-                templateUrl: './views/start/step3_basis.php',
-                controller: 'basisController'
-            })
+                // templateUrl: './views/start/step3_basis.php',
+                // controller: 'mainController'
+            }).within()
             .segment('example', {
-                templateUrl: './views/start/step4_example.php',
-                controller: 'exampleController'
+                // templateUrl: './views/start/step4_example.php',
+                // controller: 'mainController'
             })
-            .up() //start
+            .up() .up() .up()//start
             .segment('search', {
                 templateUrl: './views/search/search.php',
                 controller: 'searchController'
@@ -39,6 +44,11 @@ app.config(['$routeSegmentProvider', '$routeProvider', '$locationProvider', func
                 templateUrl: './views/topics/topics.php',
                 controller: 'topicsController'
             });
-        //        .otherwise({redirectTo: '/start'});
-        $locationProvider.html5Mode(true);
+            // .segment('redirect', {
+            //   default: true,
+            //   templateUrl: '<h1><LADEN.../h1>',
+            //   controller: 'redirectController'
+            // });
+              //  $routeProvider.otherwise({redirectTo: '/'});
+        $locationProvider.html5Mode(true).hashPrefix('!');
 }]);

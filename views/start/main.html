@@ -1,0 +1,13 @@
+<div ng-if="chain.step >= 2" ng-include src="'./views/start/breadcrumb.html'" ></div>
+
+<!-- pick a requirement -->
+<div class="row" ng-if="chain.step == 1" ng-include src="'./views/start/step1_requirements.html'"></div>
+
+<!-- pick a functionality -->
+<div class="row" ng-if="chain.step == 2" ng-include src="'./views/start/step2_functionalities.html'"></div>
+
+<!-- pick an example -->
+<div class="row" ng-if="chain.step == 3" ng-include src="'./views/start/step3_basis.html'"></div>
+
+<!-- view example -->
+<div class="row" ng-if="chain.step == 4" ng-include src="'./views/start/step4_example.html'"></div>

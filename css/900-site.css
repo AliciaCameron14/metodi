@@ -12,6 +12,10 @@
     margin-right: 10px;
 }
 
+.nav-tabs {
+  margin-bottom: 50px;
+}
+
 .nav-tabs>li {
     float: none; !important
 }
@@ -24,7 +28,7 @@
     display: table;
     margin-bottom: 20px;
     height: 100px;
-    width: 25%;
+    width: 30%;
 }
 
 .block p:hover {
@@ -33,7 +37,7 @@
 }
 
 .block p {
-    display: table-cell; 
+    display: table-cell;
     vertical-align: middle;
      border-radius: 15px;
     border: 1px solid black;
@@ -41,22 +45,224 @@
 
 }
 
+.login {
+    margin-top: 150px;
+     border-radius: 15px;
+    border: 1px solid black;
+
+}
+
+.login .btn {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.login .btn-primary {
+    color:black;
+    border:1px solid black;
+    background-color: #d9d9d9;
+}
+
+.login .btn-primary:hover {
+    background-color: #bfbfbf;
+}
+
+.tableContainer {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 30px;
+  margin-bottom: 20px;
+
+}
+
+.roundContainer {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #f4f4f4;
+  margin-bottom: 20px;
+}
+
+.tdBtn {
+  padding: 0px;
+}
+
+.tdBtn .btn{
+  border-radius: 0px;
+}
+
+.tdBtn .btn-primary {
+  color: black;
+  background-color:  white;
+  border-color: white;
+}
+
+.tdBtn .btn-primary:hover {
+  color: white;
+  background-color:  #f23737;
+  border-color: #f23737;
+  line-height: 1.42857143;
+}
+
+.titleBox {
+  border: 1px solid black;
+  background-color: #70ccff;
+  padding: 10px;
+  margin-bottom: 20px;
+
+}
 
 /*Elements*/
 
+table {
+  overflow-y: visible;
+  border: 1px solid #555555;
+}
+
+table td {
+  border: 1px solid #555555;
+  padding: 5px 15px 5px 15px;
+
+}
+
+td a {
+    width:100%;
+}
+
+
+
+table th {
+  border: 1px solid #555555;
+  padding: 5px 15px 5px 15px;
+}
+
+hr {
+  border-top: 4px solid black;
+}
+
 label {
     line-height: 2.5;
+/*    min-width: 30px; !important*/
 }
 
 a {
     color: inherit; !important
 }
 
+/*Breadcrumbs*/
+.btn-breadcrumb .btn:after {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 24px solid transparent;
+  border-bottom: 24px solid transparent;
+  border-left: 10px solid white;
+  position: absolute;
+  top: 50%;
+  margin-top: -24px;
+  left: 100%;
+  z-index: 3;
+}
+.btn-breadcrumb .btn:before {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 24px solid transparent;
+  border-bottom: 24px solid transparent;
+  border-left: 10px solid rgb(173, 173, 173);
+  position: absolute;
+  top: 50%;
+  margin-top: -24px;
+  margin-left: 1px;
+  left: 100%;
+  z-index: 3;
+}
+
+/** The Spacing **/
+.btn-breadcrumb .btn {
+  font-size: 15px;
+    font-weight: bold;
+  padding:15px 0px 15px 0px;
+  width: 380px;
+}
+.btn-breadcrumb .btn:first-child {
+  /*padding:15px 140px 15px 140px;*/
+}
+.btn-breadcrumb .btn:last-child {
+  /*padding:15px 140px 15px 145px;*/
+}
+
+/** Danger button **/
+.btn-breadcrumb .btn.btn-danger:after {
+  border-left: 10px solid #d9534f;
+}
+.btn-breadcrumb .btn.btn-danger:before {
+  border-left: 10px solid #d43f3a;
+}
+.btn-breadcrumb .btn.btn-danger:hover:after {
+  border-left: 10px solid #bd2d28;
+}
+.btn-breadcrumb .btn.btn-danger:hover:before {
+  border-left: 10px solid #ac2925;
+}
+
+
 /*Media Queries*/
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
     .block {
         width: 100%;
     }
+
+    .login {
+        width: 80%;
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+
+        .login .row div {
+        width: 100%;
+    }
+}
+@media (min-width:768px) and (max-width: 1200px) {
+    .block {
+        width: 100%;
+    }
+
+    .login {
+        width: 50%;
+    }
+
+       .login .row div {
+        width: 100%;
+    }
+
+}
+
+/*
+@media (min-width:1000px) and (max-width: 1200px) {
+    .block {
+        width: 100%;
+    }
+
+    .login {
+        width: 50%;
+    }
+
+       .login .row div {
+        width: 100%;
+    }
+
+}
+*/
+
+@media (min-width:1200px) and (max-width:1400px) {
+
+    .login .row div {
+        width: 100%;
+    }
+
 }
 
 /*
