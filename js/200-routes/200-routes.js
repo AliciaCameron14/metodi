@@ -1,26 +1,34 @@
-app.config(['$routeSegmentProvider', '$routeProvider', '$locationProvider', function ($routeSegmentProvider, $routeProvider, $locationProvider)
+app.config(['$routeSegmentProvider', '$routeProvider', '$locationProvider' , function ($routeSegmentProvider, $routeProvider, $locationProvider)
     {
         $routeSegmentProvider
-      //  .when('/','requirements')
+      //  .when('/','home'),
             .when('/requirements', 'requirements')
             .when('/requirements/functionalities', 'requirements.functionalities')
             .when('/requirements/functionalities/basis', 'requirements.functionalities.basis')
             .when('/requirements/functionalities/basis/example', 'requirements.functionalities.basis.example')
             .when('/search', 'search')
             .when('/topics', 'topics')
-            // .segment('functionalities', {
-            //     templateUrl: './views/start/step2_functionalities.php',
-            //     controller: 'mainController'
+
+            // .segment('home', {
+                // templateUrl: 'index.html'
+                // controller: 'mainController'
             // })
         // .segment('start', {
         //   templateUrl: './views/start/step1_requirements.html',
         //     controller: 'mainController'
         // })
-        //     .within()
+            // .within()
             .segment('requirements', {
                 templateUrl: './views/start/main.html',
-                controller: 'mainController'
-
+                controller: 'mainController',
+                resolve: {
+                  chain: function (steps) {
+                    return steps.getChainData();
+                  },
+                  requirements: function (steps){
+                    return steps.getRequirements();
+                  }
+                }
             })
             .within()
             .segment('functionalities', {
@@ -49,6 +57,6 @@ app.config(['$routeSegmentProvider', '$routeProvider', '$locationProvider', func
             //   templateUrl: '<h1><LADEN.../h1>',
             //   controller: 'redirectController'
             // });
-              //  $routeProvider.otherwise({redirectTo: '/'});
+               $routeProvider.otherwise({redirectTo: '/'});
         $locationProvider.html5Mode(true).hashPrefix('!');
 }]);

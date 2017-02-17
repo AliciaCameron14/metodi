@@ -1,6 +1,12 @@
 var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'route-segment',
-  'view-segment'
+  'view-segment', 'ngIdle'
 ]);
+
+app.config(['KeepaliveProvider', 'IdleProvider', function(KeepaliveProvider, IdleProvider) {
+  IdleProvider.idle(20*60);
+  IdleProvider.timeout(60);
+  // KeepaliveProvider.interval(10);
+}]);
 
 app.factory("services", ['$http', function($http) {
   var serviceBase = 'services/';
@@ -78,14 +84,91 @@ obj.getChain = function() {
 }]);
 
 
-app.service('steps', ['$rootScope', function($rootScope) {
-  // var currentStep = {};
-  var requirement = {};
-  // var requirements = {};
+app.service('steps', ['$rootScope','services', function($rootScope, services) {
+
+  var allRequirements = {};
   var breadcrumbs = {};
-  var chain = {}; //contains the chosen step details eg: R1 -> F2 -> V3 and its details
+var chain = {step: {}, requirement: {}, functionality: {}, example: {}};//contains the chosen step details eg: R1 -> F2 -> V3 and its details
+
+// chain = services.getChain().then(function (data) {
+//   console.log("service get chain ");
+//   console.log(data);
+//   if (data.data) {
+//     return data.data;
+//   }
+//   else {
+//     return '';
+//   }
+// })
+
+function getChainData(){
+  return services.getChain().then(function(data){
+
+    if (!data.data) {
+
+chain.step = 1;
+      services.updateChain(chain);
+      return chain;
+    }
+    else {
+      console.log(data.data);
+      return data.data;
+    }
+  });
+}
+
+function getRequirements(){
+  return services.getRequirements().then(function(data){
+    return data.data;
+  });
+}
+
+return {getChainData:getChainData,
+getRequirements:getRequirements};
+
+// return {
+//         chainData: function () {
+//           console.log("FUNCTION");
+//
+//             return services.getChain();
+//
+//         }
+//       }
+// return {
+
+  // chainData: function(){
+  //   services.getChain().then(function(data){
+  //     if (data.data) {
+  //       chain = data.data;
+  //       console.log("data");
+  //
+  //     } else {
+  //       chain = {step: {}, requirement: {}, functionality: {}, example: {}};
+  //       console.log("no data");
+  //
+  //     }
+  //     // return chain;
+  //   })
+  //   console.log(chain);
+  //
+  //   return chain;
+  //
+  // }
+// }
+// function chainData() {
+//   services.getChain().then(function(data){
+//     if (data.data) {
+//       chain = data.data;
+//       return chain;
+//     } else return {};
+//   })
+// }
 
 }]);
+
+// app.run(['Idle', function(Idle) {
+//   Idle.watch();
+// }]);
 
 // app.run(['$location', '$rootScope', function($location, $rootScope) {
 //     $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {

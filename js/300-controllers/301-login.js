@@ -1,17 +1,20 @@
 app.controller('loginController', ['$scope', '$location', '$rootScope',
-  '$uibModal', 'services', 'steps',
-  function($scope, $location, $rootScope, $uibModal, services, steps) {
+  '$uibModal', 'services', 'steps', 'Idle', '$route',
+  function($scope, $location, $rootScope, $uibModal, services, steps, Idle, $route) {
 
     $scope.user = {};
 
     $scope.login = function() {
+      console.log("login!");
       services.login($scope.user).then(function(data) {
         if (data.data) { //user exists
           $rootScope.user =  $scope.user = data.data;
           $rootScope.userLoggedIn = true;
+          $scope.chain = steps.chain = {step: {}, requirement: {}, functionality: {}, example: {}};
+       steps.chain.step = 1;
+       Idle.watch();
           $location.path('/requirements');
-             steps.chain = {step: {}, requirement: {}, functionality: {}, example: {}};
-          steps.chain.step = 1;
+          $route.reload();
         }
       });
     };
@@ -44,6 +47,7 @@ app.controller('loginController', ['$scope', '$location', '$rootScope',
 
           services.addNewUser($scope.item).then(function(data) {
             // console.log(data);
+            //login new user
           });
         }));
     };

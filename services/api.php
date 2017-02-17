@@ -1,12 +1,12 @@
 <?php
-if (!isset($_SESSION)){
-  session_start();
-}
 
  require '../FirePHPCore/fb.php';
  	require_once("Rest.php");
 
 
+if (!isset($_SESSION)){
+  session_start();
+}
 
 	class API extends REST {
 
@@ -187,9 +187,15 @@ if (!isset($_SESSION)){
         $result = array();
 
         while($row = $r->fetch_assoc()){
-          $result[] = array_map('utf8_encode', $row);
+          foreach ($row as $key => $value) {
+            $row[$key] = utf8_encode($value);
+
+            if ($key == 'screenshot') {
+              $row[$key] = array_map(function($element) {return $element;}, explode(",", $value));
+            }
+          }
+          $result[] = array_map(function($element) {return $element;},  $row);
         }
-        // FB::log(($this->json($result), 200) );
         $this->response($this->json($result), 200); // send user details
       }
       $this->response('',204);	// No Content
