@@ -1,7 +1,7 @@
 app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
-  '$location', 'services', '$route', 'steps', 'Idle', '$uibModal',
+  '$location', 'services', '$route', 'steps', 'wordle', 'Idle', '$uibModal',
   function($scope, $rootScope, $routeSegment, $location, services, $route,
-    steps, Idle, $uibModal) {
+    steps, wordle, Idle, $uibModal) {
 
 
     $scope.getCurrent = function() {

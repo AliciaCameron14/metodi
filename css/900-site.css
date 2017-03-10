@@ -266,6 +266,26 @@ a {
   z-index: 3;
 }
 
+/*Word Cloud*/
+
+/*wordcloud text{
+  font-size:20px !important;
+}*/
+
+/*wordcloud text:nth-child(2n) {
+  font-size:3em !important;
+}
+
+wordcloud text:nth-child(3n) {
+  font-size:5em !important;
+
+}
+wordcloud text:nth-child(5n) {
+  font-size:2em !important;
+
+}*/
+
+
 /** The Spacing **/
 .btn-breadcrumb .btn {
   font-size: 15px;

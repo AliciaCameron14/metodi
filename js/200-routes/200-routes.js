@@ -50,7 +50,12 @@ app.config(['$routeSegmentProvider', '$routeProvider', '$locationProvider' , fun
             })
             .segment('topics', {
                 templateUrl: './views/topics/topics.php',
-                controller: 'topicsController'
+                controller: 'topicsController',
+                resolve: {
+                  words: function(wordle){
+                    return wordle.getWords();
+                  }
+                }
             });
             // .segment('redirect', {
             //   default: true,

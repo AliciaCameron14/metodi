@@ -1,5 +1,5 @@
 var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'route-segment',
-  'view-segment', 'ngIdle'
+  'view-segment', 'ngIdle', 'd3'
 ]);
 
 app.config(['KeepaliveProvider', 'IdleProvider', function(KeepaliveProvider, IdleProvider) {
@@ -12,9 +12,6 @@ app.factory("services", ['$http', function($http) {
   var serviceBase = 'services/';
   var obj = {};
 
-  // obj.setCurrentUser = function () {
-  //   return $http.get(serviceBase + 'setCurrentUser');
-  // };
 
 obj.updateChain = function(chain) {
   return $http.post(serviceBase + 'updateChain', chain);
@@ -41,8 +38,10 @@ obj.getChain = function() {
   };
 
 
-  obj.getRequirements = function() {
-      return $http.get(serviceBase + 'getRequirements');
+  obj.getRequirements = function(id) {
+      return $http.post(serviceBase + 'getRequirements', id).then(function(results){
+        return results;
+      });
     }
 
     obj.getFunctionalities = function(requirement) {
@@ -51,10 +50,27 @@ obj.getChain = function() {
         });
       };
 
+
       obj.getExamples = function(functionality) {
           return $http.post(serviceBase + 'getExamples', functionality).then(function(results) {
             return results;
           });
+        };
+
+        obj.getWordleFunctionalities = function(functionalities) {
+            return $http.post(serviceBase + 'getWordleFunctionalities', functionalities).then(function(results) {
+              return results;
+            });
+          };
+
+          obj.getWordleExamples = function(functionality) {
+              return $http.post(serviceBase + 'getWordleExamples', functionality).then(function(results) {
+                return results;
+              });
+            };
+
+        obj.getWords = function() {
+            return $http.get(serviceBase + 'getWords');
         };
     // obj.getCustomer = function(customerID){
     //     return $http.get(serviceBase + 'customer?id=' + customerID);
@@ -90,22 +106,10 @@ app.service('steps', ['$rootScope','services', function($rootScope, services) {
   var breadcrumbs = {};
 var chain = {step: {}, requirement: {}, functionality: {}, example: {}};//contains the chosen step details eg: R1 -> F2 -> V3 and its details
 
-// chain = services.getChain().then(function (data) {
-//   console.log("service get chain ");
-//   console.log(data);
-//   if (data.data) {
-//     return data.data;
-//   }
-//   else {
-//     return '';
-//   }
-// })
-
 function getChainData(){
   return services.getChain().then(function(data){
 
     if (!data.data) {
-
 chain.step = 1;
       services.updateChain(chain);
       return chain;
@@ -126,43 +130,23 @@ function getRequirements(){
 return {getChainData:getChainData,
 getRequirements:getRequirements};
 
-// return {
-//         chainData: function () {
-//           console.log("FUNCTION");
-//
-//             return services.getChain();
-//
-//         }
-//       }
-// return {
 
-  // chainData: function(){
-  //   services.getChain().then(function(data){
-  //     if (data.data) {
-  //       chain = data.data;
-  //       console.log("data");
-  //
-  //     } else {
-  //       chain = {step: {}, requirement: {}, functionality: {}, example: {}};
-  //       console.log("no data");
-  //
-  //     }
-  //     // return chain;
-  //   })
-  //   console.log(chain);
-  //
-  //   return chain;
-  //
-  // }
-// }
-// function chainData() {
-//   services.getChain().then(function(data){
-//     if (data.data) {
-//       chain = data.data;
-//       return chain;
-//     } else return {};
-//   })
-// }
+}]);
+
+app.service('wordle',['$rootScope', 'services', function($rootScope, services){
+
+function getWords(){
+  return services.getWords().then(function(data){
+    var words = data.data;
+    var displayWords = [];
+    for (var i = 0; i < words.length; i++) {
+    displayWords.push(words[i].word);
+    }
+    return displayWords;
+  });
+}
+
+return {getWords:getWords};
 
 }]);
 
