@@ -66,7 +66,6 @@ app.controller('searchController', ['$scope', '$location', 'services', function(
         chain.functionality = item;
 
         for (var i = 0; i < $scope.requirements.length; i++) {
-          console.log($scope.requirements[i].requirementId + " " + item.requirementId);
           if ($scope.requirements[i].requirementId == item.requirementId) {
             chain.requirement = $scope.requirements[i];
           }

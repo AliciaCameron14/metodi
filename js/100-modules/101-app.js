@@ -2,9 +2,10 @@ var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'route-segment',
   'view-segment', 'ngIdle', 'd3'
 ]);
 
-app.config(['KeepaliveProvider', 'IdleProvider', function(KeepaliveProvider, IdleProvider) {
+app.config(['KeepaliveProvider', 'IdleProvider', 'TitleProvider', function(KeepaliveProvider, IdleProvider, TitleProvider) {
   IdleProvider.idle(20*60);
   IdleProvider.timeout(60);
+  TitleProvider.enabled(false);
   // KeepaliveProvider.interval(10);
 }]);
 
@@ -115,7 +116,6 @@ chain.step = 1;
       return chain;
     }
     else {
-      console.log(data.data);
       return data.data;
     }
   });

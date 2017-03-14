@@ -44,8 +44,6 @@ $scope.chain = chain;
       $scope.chain.example = example;
       $location.path('/requirements/functionalities/basis/example');
       $scope.chain.step = 4;
-      console.log($scope.chain.example);
-
     };
 
     $scope.viewImage = function(image) {

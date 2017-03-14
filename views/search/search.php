@@ -23,7 +23,7 @@
 <div ng-if="exampleResults.length">
   <h3>Examples</h3>
   <div ng-repeat="ex in exampleResults">
-  <a href=""  ng-click="selectResult(4, ex)"><b> {{ex.functionalityId + " " + ex.exampleId }}</b>  {{ex.title}}</a>
+  <a href=""  ng-click="selectResult(4, ex)"><b> {{ex.requirementId + " " + ex.functionalityId + " " + ex.exampleId }}</b>  {{ex.title}}</a>
   </div>
 </div>
 

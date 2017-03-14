@@ -19,7 +19,7 @@
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
     <div ng-repeat="img in chain.example.screenshot" class="item" ng-class="{active: $first}">
-      <img src="./content/{{img}}" alt="" ng-click="viewImage(img)">
+      <img ng-src="{{ img && './content/'+img || './content/none.gif'}}" alt="" ng-click="viewImage(img)">
       <div class="carousel-caption">
       </div>
     </div>

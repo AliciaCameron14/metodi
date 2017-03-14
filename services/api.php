@@ -10,16 +10,14 @@ if (!isset($_SESSION)) {
 
 class API extends REST
 {
-
     public $data = "";
-
     const DB_SERVER = "localhost";
     const DB_USER = "root";
     const DB_PASSWORD = "";
     const DB = "metodi";
-
     private $db = NULL;
     private $mysqli = NULL;
+
     public function __construct()
     {
         parent::__construct(); // Init parent contructor
@@ -48,7 +46,7 @@ class API extends REST
 
     private function updateChain()
     {
-        $chain             = json_decode(file_get_contents("php://input"), true);
+        $chain = json_decode(file_get_contents("php://input"), true);
         $_SESSION['chain'] = $chain;
     }
 
@@ -106,24 +104,30 @@ class API extends REST
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
                 //fetch salt
-                $query = "SELECT salt FROM userlogin WHERE email = '$email' LIMIT 1";
-                $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+                $query = $this->mysqli->prepare('SELECT salt FROM userlogin WHERE email = ?' );
+                $query->bind_param('s', $email);
+                $query->execute();
+                $r = $query->get_result();
+                // $query = "SELECT salt FROM userlogin WHERE email = '$email' LIMIT 1";
+                // $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
 
                 if ($r->num_rows > 0) {
                     $result = $r->fetch_assoc();
-
                     $temp = base64_encode(hash_hmac('sha256', $password, $result['salt'], true));
 
                     //check
-                    $query = "SELECT id, userType, email, firstName, familyName FROM userlogin WHERE email = '$email' AND password = '" . $temp . "' LIMIT 1";
-                    $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+                    $query = $this->mysqli->prepare('SELECT id, userType, email, firstName, familyName FROM userlogin WHERE email = ? AND password = ? LIMIT 1');
+                    $query->bind_param('ss', $email, $temp);
+                    $query->execute();
+                    $r = $query->get_result();
+
+                    // $query = "SELECT id, userType, email, firstName, familyName FROM userlogin WHERE email = '$email' AND password = '" . $temp . "' LIMIT 1";
+                    // $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
 
                     if ($r->num_rows > 0) {
                         $result = $r->fetch_assoc();
                         // If success everythig is good send header as "OK" and user details
                         $this->setCurrentUser($result);
-                        // $_SESSION['user'] = $result;
-
                         $this->response($this->json($result), 200);
                     }
                     $this->response('', 204); // If no records "No Content" status
@@ -150,16 +154,24 @@ class API extends REST
 
         if (is_array($id)) {
             $comma_separated = implode("','", $id);
-            $ids             = "'" . $comma_separated . "'";
-            $query           = "SELECT requirementId, description FROM requirement WHERE requirementId IN ($ids) order by requirementId asc";
+            $ids = "'" . $comma_separated . "'";
+
+            $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement WHERE requirementId IN (?) order by requirementId asc');
+            $query->bind_param('s', $ids);
+
+            // $query           = "SELECT requirementId, description FROM requirement WHERE requirementId IN ($ids) order by requirementId asc";
         } elseif ($id) {
-            $query = "SELECT requirementId, description FROM requirement WHERE requirementId = '$id' order by requirementId asc";
+            $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement WHERE requirementId = $id order by requirementId asc');
+            $query->bind_param('s', $id);
+            // $query = "SELECT requirementId, description FROM requirement WHERE requirementId = '$id' order by requirementId asc";
         } else {
-            $query = "SELECT requirementId, description FROM requirement order by requirementId asc";
+            $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId asc');
+            // $query = "SELECT requirementId, description FROM requirement order by requirementId asc";
         }
 
-
-        $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+        $query->execute();
+        $r = $query->get_result();
+        // $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
 
         if ($r->num_rows > 0) {
             $result = array();
@@ -174,8 +186,6 @@ class API extends REST
 
     private function getFunctionalities()
     {
-      FB::log("here");
-
         if ($this->get_request_method() != "POST") {
             $this->response('', 406);
         }
@@ -183,19 +193,19 @@ class API extends REST
         $requirement = json_decode(file_get_contents("php://input"), true);
         $id    = $requirement['requirementId'];
 
-        // if (is_array($requirement)) {
-        //     $comma_separated = implode("','", $requirement);
-        //     $ids             = "'" . $comma_separated . "'";
-        //     $query           = "SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE functionalityId IN ($ids) order by functionalityId asc";
-
-        // }
         if ($id) {
-            $query = "SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE requirementId = '$id' order by functionalityId asc";
+          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE requirementId = ? order by functionalityId asc');
+            $query->bind_param('s', $id);
+            // $query = "SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE requirementId = '$id' order by functionalityId asc";
         } else {
-            $query = "SELECT requirementId, functionalityId, description, framework, guideline FROM functionality order by functionalityId asc";
+          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality order by functionalityId asc');
+            // $query = "SELECT requirementId, functionalityId, description, framework, guideline FROM functionality order by functionalityId asc";
         }
 
-        $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+        $query->execute();
+        $r = $query->get_result();
+
+        // $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
 
         if ($r->num_rows > 0) {
             $result = array();
@@ -217,22 +227,23 @@ class API extends REST
         $functionality = json_decode(file_get_contents("php://input"), true);
         $id = $functionality['functionalityId'];
 
-
-        // if (is_array($functionality)) {
-        //     $comma_separated = implode("','", $functionality);
-        //     $ids             = "'" . $comma_separated . "'";
-        //     $query           = "SELECT functionalityId, exampleId, title, description, targetGroup, screenshot FROM example WHERE exampleId IN ($ids) order by exampleId asc";
-        // }
         if ($id) {
+          $query = $this->mysqli->prepare('SELECT example.functionalityId, example.exampleId, example.title, example.description, example.targetGroup, example.screenshot, functionality.requirementId FROM example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId WHERE functionality.functionalityId = ? order by exampleId asc');
+            $query->bind_param('s', $id);
 
-            $query = "SELECT functionalityId, exampleId, title, description, targetGroup, screenshot FROM example WHERE functionalityId = '$id' order by exampleId asc";
+
+            // $query = "SELECT example.functionalityId, example.exampleId, example.title, example.description, example.targetGroup, example.screenshot, functionality.requirementId FROM example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId WHERE functionality.functionalityId = '$id' order by exampleId asc";
         }
 
         else {
-            $query = "SELECT functionalityId, exampleId, title, description, targetGroup, screenshot FROM example order by exampleId asc";
+          $query = $this->mysqli->prepare('SELECT example.functionalityId, example.exampleId, example.title, example.description, example.targetGroup, example.screenshot, functionality.requirementId FROM example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId order by exampleId asc');
+            // $query = "SELECT example.functionalityId, example.exampleId, example.title, example.description, example.targetGroup, example.screenshot, functionality.requirementId FROM example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId order by exampleId asc";
         }
 
-        $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+        $query->execute();
+        $r = $query->get_result();
+
+        // $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
 
         if ($r->num_rows > 0) {
             $result = array();
@@ -258,84 +269,103 @@ class API extends REST
         $this->response('', 204); // No Content
     }
 
-    private function getWordleFunctionalities()
-    {
-        if ($this->get_request_method() != "POST") {
-            $this->response('', 406);
-        }
+    // private function getWordleFunctionalities()
+    // {
+    //     if ($this->get_request_method() != "POST") {
+    //         $this->response('', 406);
+    //     }
+    //
+    //     $functionalities = json_decode(file_get_contents("php://input"), true);
+    //
+    //     if (is_array($functionalities)) {
+    //       $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE');
+    //         // $query = "SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE";
+    //
+    //         foreach ($functionalities as $key => $value) {
+    //
+    //             if ($key == 0) {
+    //                 $clause = " (requirementId = '" . substr($value, 0, 2) . "' AND functionalityId = '" . substr($value, 2, 2) . "' )";
+    //             } else {
+    //                 $clause = " OR (requirementId = '" . substr($value, 0, 2) . "' AND functionalityId = '" . substr($value, 2, 2) . "' )";
+    //             }
+    //             $query = $query . $clause;
+    //         }
+    //     }
+    //     $query->execute();
+    //     $r = $query->get_result();
+    //
+    //     // $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+    //
+    //     if ($r->num_rows > 0) {
+    //         $result = array();
+    //
+    //         while ($row = $r->fetch_assoc()) {
+    //             $result[] = array_map('utf8_encode', $row);
+    //         }
+    //         $this->response($this->json($result), 200); // send user details
+    //     }
+    //     $this->response('', 204); // No Content
+    // }
 
-        $functionalities = json_decode(file_get_contents("php://input"), true);
-
-        if (is_array($functionalities)) {
-            $query = "SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE";
-
-            foreach ($functionalities as $key => $value) {
-
-                if ($key == 0) {
-                    $clause = " (requirementId = '" . substr($value, 0, 2) . "' AND functionalityId = '" . substr($value, 2, 2) . "' )";
-                } else {
-                    $clause = " OR (requirementId = '" . substr($value, 0, 2) . "' AND functionalityId = '" . substr($value, 2, 2) . "' )";
-                }
-                $query = $query . $clause;
-            }
-        }
-
-        $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
-
-        if ($r->num_rows > 0) {
-            $result = array();
-
-            while ($row = $r->fetch_assoc()) {
-                $result[] = array_map('utf8_encode', $row);
-            }
-            $this->response($this->json($result), 200); // send user details
-        }
-        $this->response('', 204); // No Content
-    }
-
-    private function getWordleExamples()
-    {
-        if ($this->get_request_method() != "POST") {
-            $this->response('', 406);
-        }
-
-        $examples = json_decode(file_get_contents("php://input"), true);
-
-        if (is_array($examples)) {
-            $query =  "SELECT functionalityId, exampleId, title, description, targetGroup, screenshot FROM example WHERE";
-
-            foreach ($examples as $key => $value) {
-
-                if ($key == 0) {
-                    $clause = " (functionalityId = '" . substr($value, 0, 2) . "' AND exampleId = '" . substr($value, 2, 2) . "' )";
-                } else {
-                    $clause = " OR (functionalityId = '" . substr($value, 0, 2) . "' AND exampleId = '" . substr($value, 2, 2) . "' )";
-                }
-                $query = $query . $clause;
-            }
-        }
-
-        $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
-
-        if ($r->num_rows > 0) {
-            $result = array();
-
-            while ($row = $r->fetch_assoc()) {
-                $result[] = array_map('utf8_encode', $row);
-            }
-            $this->response($this->json($result), 200); // send user details
-        }
-        $this->response('', 204); // No Content
-    }
+    // private function getWordleExamples()
+    // {
+    //     if ($this->get_request_method() != "POST") {
+    //         $this->response('', 406);
+    //     }
+    //
+    //     $examples = json_decode(file_get_contents("php://input"), true);
+    //
+    //     if (is_array($examples)) {
+    //         $query =  "SELECT example.functionalityId, example.exampleId, example.title, example.description, example.targetGroup, example.screenshot, functionality.requirementId FROM example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId WHERE";
+    //
+    //         foreach ($examples as $key => $value) {
+    //
+    //             if ($key == 0) {
+    //                 $clause = " (example.functionalityId = '" . substr($value, 0, 2) . "' AND example.exampleId = '" . substr($value, 2, 2) . "' )";
+    //             } else {
+    //                 $clause = " OR (example.functionalityId = '" . substr($value, 0, 2) . "' AND example.exampleId = '" . substr($value, 2, 2) . "' )";
+    //             }
+    //             $query = $query . $clause;
+    //         }
+    //     }
+    //
+    //     $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+    //
+    //     if ($r->num_rows > 0) {
+    //         $result = array();
+    //
+    //         while ($row = $r->fetch_assoc()) {
+    //             foreach ($row as $key => $value) {
+    //                 $row[$key] = utf8_encode($value);
+    //
+    //                 if ($key == 'screenshot') {
+    //                     $row[$key] = array_map(function($element)
+    //                     {
+    //                         return $element;
+    //                     }, explode(",", $value));
+    //                 }
+    //             }
+    //             $result[] = array_map(function($element)
+    //             {
+    //                 return $element;
+    //             }, $row);
+    //         }
+    //         $this->response($this->json($result), 200); // send user details
+    //     }
+    //     $this->response('', 204); // No Content
+    // }
 
     private function getWords()
     {
         if ($this->get_request_method() != "GET") {
             $this->response('', 406);
         }
+          $query = $this->mysqli->prepare('SELECT word, requirements, functionalities, examples FROM wordle order by id asc');
 
-        $query = "SELECT word, requirements, functionalities, examples FROM wordle order by id asc";
-        $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+        // $query = "SELECT word, requirements, functionalities, examples FROM wordle order by id asc";
+        $query->execute();
+        $r = $query->get_result();
+        // $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
 
         if ($r->num_rows > 0) {
             $result = array();
@@ -359,23 +389,6 @@ class API extends REST
             $this->response($this->json($result), 200); // send user details
         }
         $this->response('', 204); // No Content
-    }
-
-    private function customer()
-    {
-        // if($this->get_request_method() != "GET"){
-        //     $this->response('',406);
-        // }
-        // $id = (int)$this->_request['id'];
-        // if($id > 0){
-        //     $query="SELECT distinct c.customerNumber, c.customerName, c.email, c.address, c.city, c.state, c.postalCode, c.country FROM angularcode_customers c where c.customerNumber=$id";
-        //     $r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
-        //     if($r->num_rows > 0) {
-        //         $result = $r->fetch_assoc();
-        //         $this->response($this->json($result), 200); // send user details
-        //     }
-        // }
-        // $this->response('',204);    // If no records "No Content" status
     }
 
     private function insertUser()
@@ -402,9 +415,9 @@ class API extends REST
             'organisationEmail',
             'organisationPhone'
         );
-        $keys         = array_keys($user);
-        $columns      = '';
-        $values       = '';
+        $keys = array_keys($user);
+        $columns = '';
+        $values = '';
         foreach ($column_names as $desired_key) { // Check the user received. If blank insert blank into the array.
             if (!in_array($desired_key, $keys)) {
                 $$desired_key = '';
@@ -425,49 +438,6 @@ class API extends REST
             $this->response($this->json($success), 200);
         } else
             $this->response('', 204); //"No Content" status
-    }
-
-    private function updateCustomer()
-    {
-        // if($this->get_request_method() != "POST"){
-        //     $this->response('',406);
-        // }
-        // $customer = json_decode(file_get_contents("php://input"),true);
-        // $id = (int)$customer['id'];
-        // $column_names = array('customerName', 'email', 'city', 'address', 'country');
-        // $keys = array_keys($customer['customer']);
-        // $columns = '';
-        // $values = '';
-        // foreach($column_names as $desired_key){ // Check the customer received. If key does not exist, insert blank into the array.
-        //    if(!in_array($desired_key, $keys)) {
-        //            $$desired_key = '';
-        //     }else{
-        //         $$desired_key = $customer['customer'][$desired_key];
-        //     }
-        //     $columns = $columns.$desired_key."='".$$desired_key."',";
-        // }
-        // $query = "UPDATE angularcode_customers SET ".trim($columns,',')." WHERE customerNumber=$id";
-        // if(!empty($customer)){
-        //     $r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
-        //     $success = array('status' => "Success", "msg" => "Customer ".$id." Updated Successfully.", "data" => $customer);
-        //     $this->response($this->json($success),200);
-        // }else
-        //     $this->response('',204);    // "No Content" status
-    }
-
-    private function deleteCustomer()
-    {
-        // if($this->get_request_method() != "DELETE"){
-        //     $this->response('',406);
-        // }
-        // $id = (int)$this->_request['id'];
-        // if($id > 0){
-        //     $query="DELETE FROM angularcode_customers WHERE customerNumber = $id";
-        //     $r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
-        //     $success = array('status' => "Success", "msg" => "Successfully deleted one record.");
-        //     $this->response($this->json($success),200);
-        // }else
-        //     $this->response('',204);    // If no records "No Content" status
     }
 
     /*

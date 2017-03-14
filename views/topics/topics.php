@@ -12,14 +12,14 @@
 <div ng-if="functionalityLinks.length">
   <h3>Functionalities</h3>
   <div ng-repeat="func in functionalityLinks">
-    <a href=""  ng-click="selectResult(3, func)"><b>{{func.functionalityId }}</b> {{func.description}}</a>
+    <a href=""  ng-click="selectResult(3, func)"><b>{{func.requirementId  + " " +  func.functionalityId }}</b> {{func.description}}</a>
   </div>
 </div>
 
 <div ng-if="exampleLinks.length">
   <h3>Examples</h3>
   <div ng-repeat="ex in exampleLinks">
-  <a href=""  ng-click="selectResult(4, ex)"><b> {{ex.exampleId }}</b>  {{ex.title}}</a>
+  <a href=""  ng-click="selectResult(4, ex)"><b>{{ex.requirementId + " " + ex.functionalityId + " " + ex.exampleId }}</b>  {{ex.title}}</a>
   </div>
 </div>
 </div>
