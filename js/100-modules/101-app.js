@@ -1,5 +1,5 @@
 var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'route-segment',
-  'view-segment', 'ngIdle', 'd3'
+  'view-segment', 'ngIdle', 'd3', 'ui.toggle', 'angularFileUpload'
 ]);
 
 app.config(['KeepaliveProvider', 'IdleProvider', 'TitleProvider', function(KeepaliveProvider, IdleProvider, TitleProvider) {
@@ -79,6 +79,76 @@ obj.getChain = function() {
 
   obj.addNewUser = function(user) {
     return $http.post(serviceBase + 'insertUser', user).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.editRequirement = function(req) {
+    return $http.post(serviceBase + 'editRequirement', req).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.addRequirement = function(req) {
+    return $http.post(serviceBase + 'addRequirement', req).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.deleteRequirement = function(req) {
+    return $http.post(serviceBase + 'deleteRequirement', req).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.editFunctionality = function(func) {
+    return $http.post(serviceBase + 'editFunctionality', func).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.addFunctionality = function(func) {
+    return $http.post(serviceBase + 'addFunctionality', func).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.deleteFunctionality = function(func) {
+    return $http.post(serviceBase + 'deleteFunctionality', func).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.editExample = function(ex) {
+    return $http.post(serviceBase + 'editExample', ex).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.addExample = function(ex) {
+    return $http.post(serviceBase + 'addExample', ex).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.deleteExample = function(ex) {
+    return $http.post(serviceBase + 'deleteExample', ex).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.addExampleImg = function(ex) {
+    return $http.post(serviceBase + 'addExampleImg', ex).then(function(
       results) {
       return results;
     });

@@ -13,6 +13,9 @@
 
     <h4>Richtlijnen:</h4>
   {{chain.functionality.guideline}}
+<div ng-if="user.userType == 0 && editMode" >
+    <i style="float:right;" class="fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editBasisprincipe(chain.functionality) " aria-hidden="true"></i>
+</div>
   </div>
 </div>
 
@@ -23,6 +26,9 @@
       Voorbeelden
     </p>
   </div>
+  <div ng-if="user.userType == 0 && editMode" class="col-lg-3">
+    <i class="fa fa-2x fa-plus-circle" ng-click="addExample()" aria-hidden="true"></i> add Voorbeelden
+  </div>
 
   <div class="col-lg-10 shadow tableContainer">
   <table class="col-lg-12">
@@ -31,7 +37,7 @@
         Nr.
       </th>
       <th>
-        Omschrijving
+        Titel
       </th>
       <th>
         Doelgroep
@@ -46,6 +52,8 @@
       </td>
       <td>
   {{example.title}}
+  <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteExample(example) " aria-hidden="true" ></i>
+ <i ng-if="user.userType == 0 && editMode" class="fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editExample(example) " aria-hidden="true"></i>
       </td>
   <td>
     {{example.targetGroup}}
@@ -55,7 +63,44 @@
       </td>
     </tr>
   </table>
+  </div>
+</div>
 
+
+<div class="row">
+  <div class="text-center sectionHeading col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-sm-3 col-md-3 col-lg-3">
+    <p>
+      Bekijk ook zeker
+    </p>
+  </div>
+  <div ng-if="user.userType == 0 && editMode" class="col-lg-3">
+    <i class="fa fa-2x fa-plus-circle" ng-click="addFunctionality()" aria-hidden="true"></i> add link
   </div>
 
+  <div class="col-lg-10 shadow tableContainer">
+  <table class="col-lg-12">
+    <tr>
+      <th>
+        Functionaliteit
+      </th>
+      <th>
+        Requirement
+      </th>
+      <th>
+        Actie
+      </th>
+    </tr>
+    <tr >
+      <td>
+   <i ng-if="user.userType == 0 && editMode" class="fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editFunctionality(functionality) " aria-hidden="true"></i>
+      </td>
+  <td>
+
+  </td>
+      <td class="tdBtn">
+
+      </td>
+    </tr>
+  </table>
+  </div>
 </div>

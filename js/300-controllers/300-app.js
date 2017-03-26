@@ -35,55 +35,61 @@ app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
     }
 
     $scope.$on('IdleStart', function() {
+      $scope.title = "Sessie inactief";
+      $scope.message = "Do you wish to continue your session?";
+      $scope.btnYes = "Voortzetten";
+      $scope.btnNo = "Uitloggen";
 
-       $scope.title = "Sessie inactief";
-       $scope.message = "Do you wish to continue your session?";
-       $scope.btnYes = "Voortzetten";
-       $scope.btnNo = "Uitloggen";
+      $scope.warning = ($uibModal.open({
+        templateUrl: './views/idle-warning.html',
+        scope: $scope
+      }));
+    });
 
-       $scope.warning = ($uibModal.open({
-      templateUrl: './views/idle-warning.html',
-      scope: $scope
-    }));
-     });
+    $scope.$on('IdleTimeout', function() {
+      $scope.logout();
+      $scope.title = "Sessie verlopen";
+      $scope.message =
+        "U werd automatisch afgemeld na 20 minuten van inactiviteit";
+      $scope.btnYes = "Inloggen";
+      $scope.btnNo = "OK";
 
-     $scope.$on('IdleTimeout', function(){
-       $scope.logout();
+      if ($scope.warning) {
+        $scope.warning.close();
+        $scope.warning = null;
+      }
 
-       $scope.title = "Sessie verlopen";
-       $scope.message = "U werd automatisch afgemeld na 20 minuten van inactiviteit";
-       $scope.btnYes = "Inloggen";
-       $scope.btnNo = "OK";
+      return ($uibModal.open({
+        templateUrl: './views/idle-warning.html',
+        scope: $scope
+      }).result.then(function() {
+        $location.path('/');
+      }));
 
-if ($scope.warning) {
-  $scope.warning.close();
-           $scope.warning = null;
-}
+    });
 
-       return ($uibModal.open({
-      templateUrl: './views/idle-warning.html',
-      scope: $scope
-    }).result.then(function(){
-      $location.path('/');
-    }));
-
-     });
-
-     $scope.login = function() {
-       services.login($scope.user).then(function(data) {
-         if (data.data) { //user exists
-           $rootScope.user =  $scope.user = data.data;
-           $rootScope.userLoggedIn = true;
-           $scope.chain = steps.chain = {step: {}, requirement: {}, functionality: {}, example: {}};
-        steps.chain.step = 1;
-        Idle.watch();
+    $scope.login = function() {
+      services.login($scope.user).then(function(data) {
+        if (data.data) { //user exists
+          $rootScope.user = $scope.user = data.data;
+          $rootScope.userLoggedIn = true;
+          $scope.chain = steps.chain = {
+            step: {},
+            requirement: {},
+            functionality: {},
+            example: {}
+          };
+          steps.chain.step = 1;
+          Idle.watch();
 
           $location.path('/requirements');
 
-           $scope.selectTab();
-         }
-       });
-     };
+          $scope.selectTab();
+        }
+      });
+
+      $scope.editMode = false;
+    };
 
     $scope.logout = function() {
       services.clearCurrentUser().then(function() {
@@ -92,25 +98,26 @@ if ($scope.warning) {
         Idle.unwatch();
         $location.path('/');
       });
-        $scope.getCurrent();
+      $scope.getCurrent();
     };
 
 
     $scope.register = function() {
-
       $scope.item = {};
-
       return ($uibModal.open({
           templateUrl: './views/login/register.html',
           scope: $scope
         })
         .result.then(function() {
           $scope.item['userType'] = 1;
-
           services.addNewUser($scope.item).then(function(data) {
             //login new user
           });
         }));
+    };
+
+    $scope.toggleEditMode = function() {
+      $scope.editMode = !$scope.editMode;
     };
 
     //In a way, the breadcrumbs are "one step behind"
@@ -142,17 +149,18 @@ if ($scope.warning) {
       label: 'Topics'
     }];
 
-$scope.selectTab = function() {
-  for (i = 0; i < $scope.tabs.length; i++) {
-    if ($location.path() == "/" + $scope.tabs[i].url) {
-      $scope.selectedTab = $scope.tabs[i];
-      break;
-    } if ($location.path().indexOf("functionalities") != (-1)) {
-      $scope.selectedTab = $scope.tabs[0];
-      break;
+    $scope.selectTab = function() {
+      for (i = 0; i < $scope.tabs.length; i++) {
+        if ($location.path() == "/" + $scope.tabs[i].url) {
+          $scope.selectedTab = $scope.tabs[i];
+          break;
+        }
+        if ($location.path().indexOf("functionalities") != (-1)) {
+          $scope.selectedTab = $scope.tabs[0];
+          break;
+        }
+      }
     }
-  }
-}
 
     $scope.setSelectedTab = function(tab) {
       $scope.chain = steps.chain;
@@ -165,7 +173,6 @@ $scope.selectTab = function() {
           tab.url = "requirements/functionalities/basis";
         } else if (steps.chain.step == 4) {
           tab.url = "requirements/functionalities/basis/example";
-
         }
       }
       $scope.selectedTab = tab;
@@ -177,10 +184,8 @@ $scope.selectTab = function() {
       } else return "";
     };
 
-
-$scope.selectTab();
-$scope.getCurrent();
-
+    $scope.selectTab();
+    $scope.getCurrent();
 
   }
 ]);

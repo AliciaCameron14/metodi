@@ -86,7 +86,6 @@ class API extends REST
         $this->response('', 500);
     }
 
-
     private function login()
     {
         if ($this->get_request_method() != "POST") {
@@ -226,24 +225,21 @@ class API extends REST
 
         $functionality = json_decode(file_get_contents("php://input"), true);
         $id = $functionality['functionalityId'];
+        $requirementId = $functionality['requirementId'];
 
         if ($id) {
-          $query = $this->mysqli->prepare('SELECT example.functionalityId, example.exampleId, example.title, example.description, example.targetGroup, example.screenshot, functionality.requirementId FROM example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId WHERE functionality.functionalityId = ? order by exampleId asc');
-            $query->bind_param('s', $id);
 
+          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId asc');
+            $query->bind_param('ss', $requirementId, $id);
 
-            // $query = "SELECT example.functionalityId, example.exampleId, example.title, example.description, example.targetGroup, example.screenshot, functionality.requirementId FROM example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId WHERE functionality.functionalityId = '$id' order by exampleId asc";
         }
 
         else {
-          $query = $this->mysqli->prepare('SELECT example.functionalityId, example.exampleId, example.title, example.description, example.targetGroup, example.screenshot, functionality.requirementId FROM example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId order by exampleId asc');
-            // $query = "SELECT example.functionalityId, example.exampleId, example.title, example.description, example.targetGroup, example.screenshot, functionality.requirementId FROM example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId order by exampleId asc";
+            $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example order by exampleId asc');
         }
 
         $query->execute();
         $r = $query->get_result();
-
-        // $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
 
         if ($r->num_rows > 0) {
             $result = array();
@@ -268,92 +264,6 @@ class API extends REST
         }
         $this->response('', 204); // No Content
     }
-
-    // private function getWordleFunctionalities()
-    // {
-    //     if ($this->get_request_method() != "POST") {
-    //         $this->response('', 406);
-    //     }
-    //
-    //     $functionalities = json_decode(file_get_contents("php://input"), true);
-    //
-    //     if (is_array($functionalities)) {
-    //       $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE');
-    //         // $query = "SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE";
-    //
-    //         foreach ($functionalities as $key => $value) {
-    //
-    //             if ($key == 0) {
-    //                 $clause = " (requirementId = '" . substr($value, 0, 2) . "' AND functionalityId = '" . substr($value, 2, 2) . "' )";
-    //             } else {
-    //                 $clause = " OR (requirementId = '" . substr($value, 0, 2) . "' AND functionalityId = '" . substr($value, 2, 2) . "' )";
-    //             }
-    //             $query = $query . $clause;
-    //         }
-    //     }
-    //     $query->execute();
-    //     $r = $query->get_result();
-    //
-    //     // $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
-    //
-    //     if ($r->num_rows > 0) {
-    //         $result = array();
-    //
-    //         while ($row = $r->fetch_assoc()) {
-    //             $result[] = array_map('utf8_encode', $row);
-    //         }
-    //         $this->response($this->json($result), 200); // send user details
-    //     }
-    //     $this->response('', 204); // No Content
-    // }
-
-    // private function getWordleExamples()
-    // {
-    //     if ($this->get_request_method() != "POST") {
-    //         $this->response('', 406);
-    //     }
-    //
-    //     $examples = json_decode(file_get_contents("php://input"), true);
-    //
-    //     if (is_array($examples)) {
-    //         $query =  "SELECT example.functionalityId, example.exampleId, example.title, example.description, example.targetGroup, example.screenshot, functionality.requirementId FROM example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId WHERE";
-    //
-    //         foreach ($examples as $key => $value) {
-    //
-    //             if ($key == 0) {
-    //                 $clause = " (example.functionalityId = '" . substr($value, 0, 2) . "' AND example.exampleId = '" . substr($value, 2, 2) . "' )";
-    //             } else {
-    //                 $clause = " OR (example.functionalityId = '" . substr($value, 0, 2) . "' AND example.exampleId = '" . substr($value, 2, 2) . "' )";
-    //             }
-    //             $query = $query . $clause;
-    //         }
-    //     }
-    //
-    //     $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
-    //
-    //     if ($r->num_rows > 0) {
-    //         $result = array();
-    //
-    //         while ($row = $r->fetch_assoc()) {
-    //             foreach ($row as $key => $value) {
-    //                 $row[$key] = utf8_encode($value);
-    //
-    //                 if ($key == 'screenshot') {
-    //                     $row[$key] = array_map(function($element)
-    //                     {
-    //                         return $element;
-    //                     }, explode(",", $value));
-    //                 }
-    //             }
-    //             $result[] = array_map(function($element)
-    //             {
-    //                 return $element;
-    //             }, $row);
-    //         }
-    //         $this->response($this->json($result), 200); // send user details
-    //     }
-    //     $this->response('', 204); // No Content
-    // }
 
     private function getWords()
     {
@@ -390,6 +300,387 @@ class API extends REST
         }
         $this->response('', 204); // No Content
     }
+
+    private function editRequirement()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $requirement = json_decode(file_get_contents("php://input"), true);
+        $id = $requirement['requirementId'];
+        $desc = $requirement['description'];
+
+        if ($requirement) {
+            $query = $this->mysqli->prepare('UPDATE requirement SET description = ? WHERE requirementId = ?');
+            $query->bind_param('ss', $desc, $id);
+        }
+
+        $query->execute();
+        if ($this->mysqli->affected_rows >= 0) {
+
+              $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId asc');
+
+          $query->execute();
+          $r = $query->get_result();
+
+          if ($r->num_rows > 0) {
+              $result = array();
+
+              while ($row = $r->fetch_assoc()) {
+                  $result[] = array_map('utf8_encode', $row);
+              }
+              $this->response($this->json($result), 200); // send user details
+          }
+        }
+        $this->response('', 500); // If no records "No Content" status
+    }
+
+    private function addRequirement()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $requirement = json_decode(file_get_contents("php://input"), true);
+        $id = $requirement['requirementId'];
+        $desc = $requirement['description'];
+
+        if ($requirement) {
+            $query = $this->mysqli->prepare('INSERT INTO requirement (requirementId, description) VALUES(?,?)');
+            $query->bind_param('ss',$id, $desc);
+        }
+        $query->execute();
+        if ($this->mysqli->affected_rows >= 0) {
+
+              $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId asc');
+
+          $query->execute();
+          $r = $query->get_result();
+
+          if ($r->num_rows > 0) {
+              $result = array();
+
+              while ($row = $r->fetch_assoc()) {
+                  $result[] = array_map('utf8_encode', $row);
+              }
+              $this->response($this->json($result), 200); // send user details
+          }
+        }
+        $this->response('', 500); // If no records "No Content" status
+    }
+
+    private function deleteRequirement()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $requirement = json_decode(file_get_contents("php://input"), true);
+        $id = $requirement['requirementId'];
+
+        if ($requirement) {
+            $query = $this->mysqli->prepare('DELETE FROM requirement WHERE requirementId = ?');
+            $query->bind_param('s',$id);
+        }
+        $query->execute();
+        if ($this->mysqli->affected_rows >= 0) {
+
+              $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId asc');
+
+          $query->execute();
+          $r = $query->get_result();
+
+          if ($r->num_rows > 0) {
+              $result = array();
+
+              while ($row = $r->fetch_assoc()) {
+                  $result[] = array_map('utf8_encode', $row);
+              }
+              $this->response($this->json($result), 200); // send user details
+          }
+        }
+        $this->response('', 204); // If no records "No Content" status
+    }
+
+    private function editFunctionality()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $functionality = json_decode(file_get_contents("php://input"), true);
+        $requirementId = $functionality['requirementId'];
+        $functionalityId = $functionality['functionalityId'];
+        $framework = $functionality['framework'];
+        $guideline = $functionality['guideline'];
+        $desc = $functionality['description'];
+
+        if (array_key_exists('oldRequirementId', $functionality)) {
+          $oldRequirementId = $functionality['oldRequirementId'];
+        } else $oldRequirementId = $functionality['requirementId'];
+
+        if ($functionality) {
+            $query = $this->mysqli->prepare('UPDATE functionality SET requirementId = ?, description = ?, framework = ?, guideline = ? WHERE functionalityId = ? AND requirementId = ? ');
+            $query->bind_param('ssssss', $requirementId, $desc, $framework, $guideline,  $functionalityId, $oldRequirementId);
+        }
+
+        $query->execute();
+        if ($this->mysqli->affected_rows >= 0) {
+
+          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE requirementId = ? order by functionalityId asc');
+            $query->bind_param('s', $oldRequirementId);
+
+          $query->execute();
+          $r = $query->get_result();
+
+          if ($r->num_rows > 0) {
+              $result = array();
+
+              while ($row = $r->fetch_assoc()) {
+                  $result[] = array_map('utf8_encode', $row);
+              }
+              $this->response($this->json($result), 200); // send user details
+          }
+        }
+        $this->response('', 204); // If no records "No Content" status
+    }
+
+    private function addFunctionality()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $functionality = json_decode(file_get_contents("php://input"), true);
+        $requirementId = $functionality['requirementId'];
+        $functionalityId = $functionality['functionalityId'];
+        $desc = $functionality['description'];
+
+        if ($functionality) {
+            $query = $this->mysqli->prepare('INSERT INTO functionality (requirementId, functionalityId, description) VALUES(?,?,?)');
+            $query->bind_param('sss', $requirementId, $functionalityId, $desc);
+
+        }
+        $query->execute();
+        if ($this->mysqli->affected_rows >= 0) {
+
+          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE requirementId = ? order by functionalityId asc');
+            $query->bind_param('s', $requirementId);
+
+
+          $query->execute();
+          $r = $query->get_result();
+
+          if ($r->num_rows > 0) {
+              $result = array();
+
+              while ($row = $r->fetch_assoc()) {
+                  $result[] = array_map('utf8_encode', $row);
+              }
+              $this->response($this->json($result), 200); // send user details
+          }
+        }
+        $this->response('', 500); // If no records "No Content" status
+    }
+
+    private function deleteFunctionality()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $functionality = json_decode(file_get_contents("php://input"), true);
+        $functionalityId = $functionality['functionalityId'];
+        $requirementId = $functionality['requirementId'];
+
+
+        if ($functionality) {
+            $query = $this->mysqli->prepare('DELETE FROM functionality WHERE functionalityId = ? AND requirementId = ?');
+            $query->bind_param('ss', $functionalityId, $requirementId);
+        }
+        $query->execute();
+        if ($this->mysqli->affected_rows >= 0) {
+
+          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE requirementId = ? order by functionalityId asc');
+            $query->bind_param('s', $requirementId);
+
+          $query->execute();
+          $r = $query->get_result();
+
+          if ($r->num_rows > 0) {
+              $result = array();
+
+              while ($row = $r->fetch_assoc()) {
+                  $result[] = array_map('utf8_encode', $row);
+              }
+              $this->response($this->json($result), 200); // send user details
+          }
+        else  $this->response('', 204); // If no records "No Content" status
+        }
+    }
+
+    private function editExample()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $example = json_decode(file_get_contents("php://input"), true);
+        $exampleId = $example['exampleId'];
+        $requirementId = $example['requirementId'];
+        $functionalityId = $example['functionalityId'];
+        $title = $example['title'];
+        $desc = $example['description'];
+        $targetGroup = $example['targetGroup'];
+
+        if (array_key_exists('oldFunctionalityId', $example)) {
+          $oldFunctionalityId = $example['oldFunctionalityId'];
+        } else $oldFunctionalityId = $example['functionalityId'];
+
+        if ($example) {
+            $query = $this->mysqli->prepare('UPDATE example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId SET example.functionalityId = ?, example.title = ?, example.description = ?, example.targetGroup = ? WHERE example.exampleId = ? AND example.functionalityId = ? AND functionality.requirementId = ?');
+
+            $query->bind_param('sssssss', $functionalityId, $title, $desc, $targetGroup, $exampleId, $oldFunctionalityId, $requirementId);
+        }
+
+        $query->execute();
+        if ($this->mysqli->affected_rows >= 0) {
+
+          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId asc');
+            $query->bind_param('ss', $requirementId, $oldFunctionalityId);
+
+          $query->execute();
+          $r = $query->get_result();
+
+          if ($r->num_rows > 0) {
+              $result = array();
+
+              while ($row = $r->fetch_assoc()) {
+                  $result[] = array_map('utf8_encode', $row);
+              }
+              $this->response($this->json($result), 200); // send user details
+          }
+        }
+        $this->response('', 204); // If no records "No Content" status
+    }
+
+    private function addExample()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $example = json_decode(file_get_contents("php://input"), true);
+        $exampleId = $example['exampleId'];
+        $requirementId = $example['requirementId'];
+        $functionalityId = $example['functionalityId'];
+        $title = $example['title'];
+        $targetGroup = $example['targetGroup'];
+
+        if ($example) {
+            $query = $this->mysqli->prepare('INSERT INTO example (requirementId, functionalityId, exampleId, title, targetGroup) VALUES(?,?,?,?,?)');
+            $query->bind_param('sssss', $requirementId, $functionalityId, $exampleId, $title, $targetGroup );
+
+        }
+        $query->execute();
+        if ($this->mysqli->affected_rows >= 0) {
+
+          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId asc');
+            $query->bind_param('ss', $requirementId, $functionalityId);
+
+          $query->execute();
+          $r = $query->get_result();
+
+          if ($r->num_rows > 0) {
+              $result = array();
+
+              while ($row = $r->fetch_assoc()) {
+                  $result[] = array_map('utf8_encode', $row);
+              }
+              $this->response($this->json($result), 200); // send user details
+          }
+        }
+        $this->response('', 500); // If no records "No Content" status
+    }
+
+    private function deleteExample()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $example = json_decode(file_get_contents("php://input"), true);
+        $exampleId = $example['exampleId'];
+        $requirementId = $example['requirementId'];
+        $functionalityId = $example['functionalityId'];
+
+
+        if ($example) {
+            $query = $this->mysqli->prepare('DELETE FROM example WHERE functionalityId = ? AND requirementId = ? AND exampleId = ?');
+            $query->bind_param('sss', $functionalityId, $requirementId, $exampleId);
+        }
+        $query->execute();
+        if ($this->mysqli->affected_rows >= 0) {
+
+          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId asc');
+            $query->bind_param('ss', $requirementId, $functionalityId);
+
+          $query->execute();
+          $r = $query->get_result();
+
+          if ($r->num_rows > 0) {
+              $result = array();
+
+              while ($row = $r->fetch_assoc()) {
+                  $result[] = array_map('utf8_encode', $row);
+              }
+              $this->response($this->json($result), 200); // send user details
+          }
+        else  $this->response('', 204); // If no records "No Content" status
+        }
+    }
+    private function addExampleImg()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $example = json_decode(file_get_contents("php://input"), true);
+        $exampleId = $example['exampleId'];
+        $requirementId = $example['requirementId'];
+        $functionalityId = $example['functionalityId'];
+        $images = $example['images'];
+
+FB::info($example);
+
+        // if ($example) {
+        //     $query = $this->mysqli->prepare('UPDATE example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId SET example.functionalityId = ?, example.title = ?, example.description = ?, example.targetGroup = ? WHERE example.exampleId = ? AND example.functionalityId = ? AND functionality.requirementId = ?');
+        //
+        //     $query->bind_param('sssssss', $functionalityId, $title, $desc, $targetGroup, $exampleId, $oldFunctionalityId, $requirementId);
+        // }
+        //
+        // $query->execute();
+        // if ($this->mysqli->affected_rows >= 0) {
+        //
+        //   $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId asc');
+        //     $query->bind_param('ss', $requirementId, $oldFunctionalityId);
+        //
+        //   $query->execute();
+        //   $r = $query->get_result();
+        //
+        //   if ($r->num_rows > 0) {
+        //       $result = array();
+        //
+        //       while ($row = $r->fetch_assoc()) {
+        //           $result[] = array_map('utf8_encode', $row);
+        //       }
+        //       $this->response($this->json($result), 200); // send user details
+        //   }
+        // }
+        // $this->response('', 204); // If no records "No Content" status
+    }
+
 
     private function insertUser()
     {
@@ -437,7 +728,7 @@ class API extends REST
             );
             $this->response($this->json($success), 200);
         } else
-            $this->response('', 204); //"No Content" status
+            $this->response('', 500); //"No Content" status
     }
 
     /*

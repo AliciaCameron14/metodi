@@ -18,7 +18,8 @@
         <script src="./js/000-lib/006-ui-bootstrap-tpls-2.5.0.min.js"></script>
         <script src="./js/000-lib/007-angular-idle.js"></script>
         <script src="./js/000-lib/008-angular-d3.js"></script>
-
+        <script src="./js/000-lib/009-angular-bootstrap-toggle.min.js"></script>
+        <script src="./js/000-lib/010-angular-file-upload.min.js"></script>
 
         <!-- AngularJS -->
         <script src="./js/100-modules/101-app.js"></script>
@@ -28,14 +29,12 @@
         <script src="./js/300-controllers/300-main.js"></script>
         <script src="./js/300-controllers/300-search.js"></script>
         <script src="./js/300-controllers/300-topics.js"></script>
-        <!-- <script src="./js/500-directives/500-directives.js"></script> -->
-
-
 
         <!-- Include CSS -->
         <link rel="stylesheet" href="./css/000-jquery-ui.min.css" type="text/css" />
         <link rel="stylesheet" href="./css/010-bootstrap.min.css" type="text/css" />
         <link rel="stylesheet" href="./css/020-font-awesome.min.css" type="text/css" />
+        <link rel="stylesheet" href="./css/030-angular-bootstrap-toggle.min.css" type="text/css" />
         <link rel="stylesheet" href="./css/900-site.css" type="text/css" />
 
     </head>
@@ -73,6 +72,9 @@
                                 <a ng-href={{tab.url}} ng-click="setSelectedTab(tab)">{{tab.label}}</a>
                             </li>
                         </ul>
+                        <div ng-if="user.userType == 0" style="float:right;" >
+                          Edit Mode <toggle ng-model="editMode" ng-change="toggleEditMode()"></toggle>
+                        </div>
 
                         <div class="col-lg-11 col-lg-offset-1" app-view-segment="0"></div>
                     </div>

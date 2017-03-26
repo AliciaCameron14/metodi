@@ -1,0 +1,17 @@
+<form name="form" novalidate>
+    <div class="modal-header"><strong>Bewerk Functionaliteiten</strong></div>
+    <div class="modal-body">
+      <div class="form-group">
+          <label>Requirement</label>
+          <select ng-model="item.requirementId" ng-options="req.requirementId as req.requirementId for req in allRequirements"></select>
+      </div>
+        <div class="form-group">
+            <label>Omschrijving</label>
+            <input type="text" class="form-control" ng-model="item.description" required />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" type="submit" ng-click="form.$valid?$close():0">Opslaan</button>
+        <button class="btn btn-default" type="button" ng-click="$dismiss()">Terug</button>
+    </div>
+</form>

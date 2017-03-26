@@ -5,7 +5,6 @@ app.controller('loginController', ['$scope', '$location', '$rootScope',
     $scope.user = {};
 
     $scope.login = function() {
-      console.log("login!");
       services.login($scope.user).then(function(data) {
         if (data.data) { //user exists
           $rootScope.user =  $scope.user = data.data;

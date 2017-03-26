@@ -32,7 +32,7 @@
 }
 
 .block p:hover {
-    background-color: #f23737;
+    background-color: #d0cbcb;
     color: black;
 }
 
@@ -42,8 +42,44 @@
      border-radius: 15px;
     border: 2px solid #404040;
        padding: 10px;
-
 }
+
+.block .fa-times-circle {
+  color: #f23737;
+  position: absolute;
+  top:0px;
+  right:12px;
+}
+
+.block .fa-pencil {
+  /*color: #f23737;*/
+  position: absolute;
+  top:6px;
+  right:52px;
+}
+
+.fa-plus-circle {
+  color:#6fe645 ;
+  /*margin-bottom: 10px;*/
+}
+
+.tableContainer > div > .fa-pencil {
+  position: absolute;
+  top:4px;
+}
+
+td .fa-times-circle {
+    color: #f23737;
+}
+
+.carousel .fa-times-circle {
+  color: #f23737;
+  position: absolute;
+    top: 30px;
+    right:0px;
+    z-index: 1;
+}
+
 
 .login {
     margin-top: 150px;

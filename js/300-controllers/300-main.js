@@ -1,27 +1,14 @@
 //Split into separate controllers?
 
-app.controller('mainController', ['$scope', 'services', '$location', 'steps', 'chain','requirements', '$uibModal',
-  function($scope, services, $location, steps, chain, requirements, $uibModal) {
+app.controller('mainController', ['$scope', '$rootScope', '$route', 'services', '$location', 'steps', 'chain','requirements', '$uibModal', 'FileUploader',
+  function($scope, $rootScope, $route, services, $location, steps, chain, requirements, $uibModal, FileUploader) {
 
 $scope.chain = {};
 $scope.functionalityTip = "Zie hieronder een lijst met functionaliteiten. Een functionaliteiten geeft een basisprincipe met concrete voorbeelden/implementaties weer, die je kan gebruiken om aan de bovenliggende requirement tegemoet te komen.";
 $scope.basisTip = "Ieder voorbeeld is voor een specifieke doelgroep bedoeld. We onderscheiden de volgende doelgroepen: Ouder, Leerkracht en kind. Kies 'weergeven' om de voorbeelden te tonen.";
 
-//   chain.getChainData().then(function(data){
-//   $scope.chain = data.data;
-//   // steps.chain = data.data;
-// });
 $scope.chain = chain;
       $scope.allRequirements = requirements;
-      // services.updateChain($scope.chain);
-      // $scope.chain.step = 1;
-
-
-
-      // console.log("main!");
-      // console.log($scope.chain.step);
-
-    // $scope.chain = steps.chain;
     $scope.breadcrumbs = steps.breadcrumbs;
 
     $scope.selectBreadcrumb = function(breadcrumb) {
@@ -56,16 +43,221 @@ return ($uibModal.open({
 }))
     };
 
+    $scope.editRequirement = function(item) {
+    $scope.item = angular.copy(item);
+      return ($uibModal.open({
+          templateUrl: './views/admin/requirement_edit.html',
+          scope: $scope
+        }).result.then(function() {
+          services.editRequirement($scope.item).then(function(data) {
+            if (data) {
+              $scope.allRequirements = data.data;
+            }
+          });
+        }));
+    }
 
+    $scope.addRequirement = function(){
+    $scope.item = {};
+      return ($uibModal.open({
+          templateUrl: './views/admin/requirement_add.html',
+          scope: $scope
+        }).result.then(function() {
+          services.addRequirement($scope.item).then(function(data) {
+            if (data) {
+              $scope.allRequirements = data.data;
+            }
+          });
+        }));
+    }
+
+    $scope.deleteRequirement = function(item){
+      $scope.item = angular.copy(item);
+
+      return ($uibModal.open({
+          templateUrl: './views/admin/requirement_delete.html',
+          scope: $scope
+        }).result.then(function() {
+          services.deleteRequirement($scope.item).then(function(data) {
+            if (data) {
+              $scope.allRequirements = data.data;
+            }
+          });
+        }));
+    }
+
+    $scope.editFunctionality = function(item){
+    $scope.item = angular.copy(item);
+    $scope.item.oldRequirementId = item.requirementId;
+
+      return ($uibModal.open({
+          templateUrl: './views/admin/functionality_edit.html',
+          scope: $scope
+        }).result.then(function() {
+          console.log($scope.item);
+          services.editFunctionality($scope.item).then(function(data) {
+            if (data) {
+              $scope.allFunctionalities = data.data;
+            }
+          });
+        }));
+    }
+
+    $scope.addFunctionality = function(){
+    $scope.item = {};
+    $scope.item.requirementId = $scope.chain.requirement.requirementId;
+      return ($uibModal.open({
+          templateUrl: './views/admin/functionality_add.html',
+          scope: $scope
+        }).result.then(function() {
+          console.log($scope.item);
+
+          services.addFunctionality($scope.item).then(function(data) {
+            if (data) {
+              $scope.allFunctionalities = data.data;
+            }
+          });
+        }));
+    }
+
+    $scope.deleteFunctionality = function(item){
+      $scope.item = angular.copy(item);
+
+      return ($uibModal.open({
+          templateUrl: './views/admin/functionality_delete.html',
+          scope: $scope
+        }).result.then(function() {
+          services.deleteFunctionality($scope.item).then(function(data) {
+            if (data) {
+              $scope.allFunctionalities = data.data;
+            }
+          });
+        }));
+    }
+
+    $scope.editBasisprincipe = function(item){
+    $scope.item = angular.copy(item);
+
+      return ($uibModal.open({
+          templateUrl: './views/admin/basisprincipe_edit.html',
+          scope: $scope
+        }).result.then(function() {
+          services.editFunctionality($scope.item).then(function(data) {
+            if (data) {
+              $scope.allFunctionalities = data.data;
+            }
+              $scope.chain.functionality =   $scope.item;
+          });
+        }));
+    }
+
+    $scope.editExample = function(item){
+      services.getFunctionalities($scope.chain.requirement).then(
+        function(data) {
+          $scope.allFunctionalities = data.data;
+        });
+    $scope.item = angular.copy(item);
+    $scope.item.oldFunctionalityId = item.functionalityId;
+      return ($uibModal.open({
+          templateUrl: './views/admin/example_edit.html',
+          scope: $scope
+        }).result.then(function() {
+          services.editExample($scope.item).then(function(data) {
+            if (data) {
+              $scope.allExamples = data.data;
+            }
+          });
+        }));
+    }
+
+    $scope.addExample = function(){
+    $scope.item = {};
+    $scope.item.requirementId = $scope.chain.requirement.requirementId;
+    $scope.item.functionalityId = $scope.chain.functionality.functionalityId;
+
+      return ($uibModal.open({
+          templateUrl: './views/admin/example_add.html',
+          scope: $scope
+        }).result.then(function() {
+          console.log($scope.item);
+
+          services.addExample($scope.item).then(function(data) {
+            if (data) {
+              $scope.allExamples = data.data;
+            }
+          });
+        }));
+    }
+
+    $scope.deleteExample = function(item){
+      $scope.item = angular.copy(item);
+
+      return ($uibModal.open({
+          templateUrl: './views/admin/example_delete.html',
+          scope: $scope
+        }).result.then(function() {
+          services.deleteExample($scope.item).then(function(data) {
+            if (data) {
+              $scope.allExamples = data.data;
+            }
+          });
+        }));
+    }
+
+    $scope.editExampleDesc = function(item){
+    $scope.item = angular.copy(item);
+
+      return ($uibModal.open({
+          templateUrl: './views/admin/exampleDesc_edit.html',
+          scope: $scope
+        }).result.then(function() {
+          services.editExample($scope.item).then(function(data) {
+            if (data) {
+              $scope.allExamples = data.data;
+            }
+              $scope.chain.example =   $scope.item;
+          });
+        }));
+    }
+
+    $scope.addExampleImg = function(item){
+      var uploader = $scope.uploader = new FileUploader({
+            url: 'upload.php'
+        });
+// $scope.uploader = new FileUploader();
+    $scope.item = angular.copy(item);
+    $scope.item.images = [];
+    $scope.item.folder = $scope.item.requirementId+$scope.item.functionalityId+$scope.item.exampleId;
+
+    uploader.bind('beforeupload', function (event, item) {
+      item.url = $scope.item.requirementId+$scope.item.functionalityId+$scope.item.exampleId;
+    });
+
+      return ($uibModal.open({
+          templateUrl: './views/admin/exampleImg_add.html',
+          scope: $scope
+        }).result.then(function() {
+$scope.uploader.url = "./content/"+$scope.item.folder;
+console.log($scope.uploader.url);
+
+          for (var i = 0; i <  $scope.uploader.queue.length; i++) {
+            console.log( $scope.uploader.queue[i]['file']);
+            $scope.item.images.push( $scope.uploader.queue[i]['file']);
+            $scope.uploader.queue[i]['file']['place'] =   $scope.item.folder;
+          }
+
+
+          services.addExampleImg($scope.item).then(function(data) {
+            // if (data) {
+            //   $scope.allExamples = data.data;
+            // }
+            //   $scope.chain.example =   $scope.item;
+          });
+        }));
+    }
 
     $scope.$watch('chain.step', function(newVal, oldVal) {
-      // if (newVal === oldVal) { //initializing
-      //
-      //   return;
-      // }
 
-      // else
-      //steps.chain = $scope.chain;
       switch ($scope.chain.step) {
         case 1:
           $scope.chain.requirement = $scope.chain.functionality =
