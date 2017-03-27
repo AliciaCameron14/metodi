@@ -54,7 +54,6 @@
 .block .fa-pencil {
   /*color: #f23737;*/
   position: absolute;
-  top:6px;
   right:52px;
 }
 
@@ -74,10 +73,10 @@ td .fa-times-circle {
 
 .carousel .fa-times-circle {
   color: #f23737;
-  position: absolute;
-    top: 30px;
+  /*position: absolute;*/
+    /*top: 30px;
     right:0px;
-    z-index: 1;
+    z-index: 1;*/
 }
 
 
@@ -185,6 +184,13 @@ td .fa-times-circle {
   position: absolute;
    right: -20px;
    top: -20px;
+}
+
+.smallImg {
+  border: 1px solid black;
+  max-height: 150px;
+  max-width: 150px;
+  margin: 20px;
 }
 
 

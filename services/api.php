@@ -642,43 +642,118 @@ class API extends REST
     }
     private function addExampleImg()
     {
-        if ($this->get_request_method() != "POST") {
-            $this->response('', 406);
+        $exampleId = $_POST['exampleId'];
+        $requirementId = $_POST['requirementId'];
+        $functionalityId = $_POST['functionalityId'];
+
+        if ( !empty( $_FILES ) ) {
+
+          $path = '..' . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR . $_POST['path']. DIRECTORY_SEPARATOR;
+
+          if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+          }
+            $tempPath = $_FILES[ 'file' ][ 'tmp_name' ];
+            $uploadPath = $path . $_FILES[ 'file' ][ 'name' ];
+            move_uploaded_file( $tempPath, $uploadPath );
+            // $answer = array( 'answer' => 'File transfer completed' );
+            // $json = json_encode( $answer );
+            // echo $json;
+        } else {
+            // echo 'No files';
         }
 
-        $example = json_decode(file_get_contents("php://input"), true);
-        $exampleId = $example['exampleId'];
-        $requirementId = $example['requirementId'];
-        $functionalityId = $example['functionalityId'];
-        $images = $example['images'];
+$dirContents = array_diff(scandir($path), array('..', '.'));
+$images = implode(",", $dirContents);
 
-FB::info($example);
+        if ($images) {
+            $query = $this->mysqli->prepare('UPDATE example SET screenshot = ? WHERE exampleId = ? AND functionalityId = ? AND requirementId = ?');
 
-        // if ($example) {
-        //     $query = $this->mysqli->prepare('UPDATE example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId SET example.functionalityId = ?, example.title = ?, example.description = ?, example.targetGroup = ? WHERE example.exampleId = ? AND example.functionalityId = ? AND functionality.requirementId = ?');
-        //
-        //     $query->bind_param('sssssss', $functionalityId, $title, $desc, $targetGroup, $exampleId, $oldFunctionalityId, $requirementId);
-        // }
-        //
-        // $query->execute();
-        // if ($this->mysqli->affected_rows >= 0) {
-        //
-        //   $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId asc');
-        //     $query->bind_param('ss', $requirementId, $oldFunctionalityId);
-        //
-        //   $query->execute();
-        //   $r = $query->get_result();
-        //
-        //   if ($r->num_rows > 0) {
-        //       $result = array();
-        //
-        //       while ($row = $r->fetch_assoc()) {
-        //           $result[] = array_map('utf8_encode', $row);
-        //       }
-        //       $this->response($this->json($result), 200); // send user details
-        //   }
-        // }
-        // $this->response('', 204); // If no records "No Content" status
+            $query->bind_param('ssss', $images, $exampleId, $functionalityId, $requirementId);
+            $query->execute();
+
+            if ($this->mysqli->affected_rows >= 0) {
+                  $this->response($this->json('OK'), 200); // send user details
+            }
+            $this->response('', 204); // If no records "No Content" status
+        }
+    }
+
+    private function deleteExampleImg()
+    {
+      $example = json_decode(file_get_contents("php://input"), true);
+      $exampleId = $example['exampleId'];
+      $requirementId = $example['requirementId'];
+      $functionalityId = $example['functionalityId'];
+      $folder = $example['path'];
+      $imagesToRemove = $example['imagesToRemove'];
+
+
+          $path = '..' . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR . $folder. DIRECTORY_SEPARATOR;
+
+          foreach ($imagesToRemove as $key => $value) {
+            $file_to_delete = $path.$value;
+            unlink($file_to_delete);
+          }
+
+        $dirContents = array_diff(scandir($path), array('..', '.'));
+        $images = implode(",", $dirContents);
+
+        if ($images) {
+            $query = $this->mysqli->prepare('UPDATE example SET screenshot = ? WHERE exampleId = ? AND functionalityId = ? AND requirementId = ?');
+
+            $query->bind_param('ssss', $images, $exampleId, $functionalityId, $requirementId);
+            $query->execute();
+
+            if ($this->mysqli->affected_rows >= 0) {
+                  $this->response($this->json('OK'), 200); // send user details
+            }
+            $this->response('', 204); // If no records "No Content" status
+        }
+    }
+
+    private function getExample()
+    {
+       if ($this->get_request_method() != "POST") {
+          $this->response('', 406);
+      }
+
+      $example = json_decode(file_get_contents("php://input"), true);
+      $exampleId = $example['exampleId'];
+      $requirementId = $example['requirementId'];
+      $functionalityId = $example['functionalityId'];
+
+      if ($example) {
+        $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE exampleId = ? AND functionalityId = ? AND requirementId = ? order by exampleId asc');
+
+        $query->bind_param('sss', $exampleId, $functionalityId, $requirementId);
+
+        $query->execute();
+        $r = $query->get_result();
+
+        if ($r->num_rows > 0) {
+            $result = array();
+
+            while ($row = $r->fetch_assoc()) {
+                foreach ($row as $key => $value) {
+                    $row[$key] = utf8_encode($value);
+
+                    if ($key == 'screenshot') {
+                        $row[$key] = array_map(function($element)
+                        {
+                            return $element;
+                        }, explode(",", $value));
+                    }
+                }
+                $result[] = array_map(function($element)
+                {
+                    return $element;
+                }, $row);
+            }
+            $this->response($this->json($result), 200); // send user details
+        }
+      }
+      $this->response('', 204); // No Content
     }
 
 

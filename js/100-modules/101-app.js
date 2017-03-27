@@ -58,6 +58,12 @@ obj.getChain = function() {
           });
         };
 
+        obj.getExample = function(ex) {
+            return $http.post(serviceBase + 'getExample', ex).then(function(results) {
+              return results;
+            });
+          };
+
         obj.getWordleFunctionalities = function(functionalities) {
             return $http.post(serviceBase + 'getWordleFunctionalities', functionalities).then(function(results) {
               return results;
@@ -149,6 +155,13 @@ obj.getChain = function() {
 
   obj.addExampleImg = function(ex) {
     return $http.post(serviceBase + 'addExampleImg', ex).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.deleteExampleImg = function(ex) {
+    return $http.post(serviceBase + 'deleteExampleImg', ex).then(function(
       results) {
       return results;
     });

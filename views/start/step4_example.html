@@ -23,14 +23,15 @@
     <li data-target="#carousel" data-slide-to="2"></li>
   </ol> -->
 
-  <div ng-if="user.userType == 0 && editMode" class="col-lg-3">
-    <i class="fa fa-2x fa-plus-circle" ng-click="addExampleImg(chain.example)" aria-hidden="true"></i> add image
+  <div ng-if="user.userType == 0 && editMode" class="col-lg-6">
+    <i class="btn fa fa-2x fa-plus-circle" ng-click="addExampleImg(chain.example)" aria-hidden="true"></i> add image
+    <i class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteExampleImg(chain.example) " aria-hidden="true" ></i> remove image
   </div>
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
     <div ng-repeat="img in chain.example.screenshot" class="item" ng-class="{active: $first}">
-        <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteExampleImg(chain.example) " aria-hidden="true" ></i>
-      <img ng-src="{{ img && './content/'+img || './content/none.gif'}}" alt="" ng-click="viewImage(img)">
+
+      <img ng-src="{{ img && './content/'+chain.example.path +'/'+img || './content/none.gif'}}" alt="" ng-click="viewImage(img)">
       <div class="carousel-caption">
       </div>
     </div>

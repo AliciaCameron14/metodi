@@ -29,12 +29,14 @@ $scope.chain = chain;
 
     $scope.selectExample = function(example) {
       $scope.chain.example = example;
+      $scope.chain.example.path = example.requirementId+example.functionalityId+example.exampleId;
       $location.path('/requirements/functionalities/basis/example');
       $scope.chain.step = 4;
     };
 
     $scope.viewImage = function(image) {
       $scope.image = image;
+        $scope.imagePath = $scope.chain.example.requirementId+$scope.chain.example.functionalityId+$scope.chain.example.exampleId;
 return ($uibModal.open({
   templateUrl: './views/start/image.html',
   scope: $scope,
@@ -94,7 +96,6 @@ return ($uibModal.open({
           templateUrl: './views/admin/functionality_edit.html',
           scope: $scope
         }).result.then(function() {
-          console.log($scope.item);
           services.editFunctionality($scope.item).then(function(data) {
             if (data) {
               $scope.allFunctionalities = data.data;
@@ -110,7 +111,6 @@ return ($uibModal.open({
           templateUrl: './views/admin/functionality_add.html',
           scope: $scope
         }).result.then(function() {
-          console.log($scope.item);
 
           services.addFunctionality($scope.item).then(function(data) {
             if (data) {
@@ -179,7 +179,6 @@ return ($uibModal.open({
           templateUrl: './views/admin/example_add.html',
           scope: $scope
         }).result.then(function() {
-          console.log($scope.item);
 
           services.addExample($scope.item).then(function(data) {
             if (data) {
@@ -221,39 +220,72 @@ return ($uibModal.open({
     }
 
     $scope.addExampleImg = function(item){
-      var uploader = $scope.uploader = new FileUploader({
-            url: 'upload.php'
-        });
-// $scope.uploader = new FileUploader();
+
     $scope.item = angular.copy(item);
-    $scope.item.images = [];
     $scope.item.folder = $scope.item.requirementId+$scope.item.functionalityId+$scope.item.exampleId;
 
-    uploader.bind('beforeupload', function (event, item) {
-      item.url = $scope.item.requirementId+$scope.item.functionalityId+$scope.item.exampleId;
-    });
+    var uploader = $scope.uploader = new FileUploader({
+          url: 'services/addExampleImg',
+          formData: [{
+            path: $scope.item.folder,
+          exampleId: $scope.item.exampleId,
+        functionalityId: $scope.item.functionalityId,
+        requirementId: $scope.item.requirementId
+       }]
+      });
+
 
       return ($uibModal.open({
           templateUrl: './views/admin/exampleImg_add.html',
           scope: $scope
         }).result.then(function() {
-$scope.uploader.url = "./content/"+$scope.item.folder;
-console.log($scope.uploader.url);
 
-          for (var i = 0; i <  $scope.uploader.queue.length; i++) {
-            console.log( $scope.uploader.queue[i]['file']);
-            $scope.item.images.push( $scope.uploader.queue[i]['file']);
-            $scope.uploader.queue[i]['file']['place'] =   $scope.item.folder;
-          }
+          services.getExamples($scope.chain.functionality).then(
+            function(data) {
+              $scope.allExamples = data.data;
+            });
 
-
-          services.addExampleImg($scope.item).then(function(data) {
-            // if (data) {
-            //   $scope.allExamples = data.data;
-            // }
-            //   $scope.chain.example =   $scope.item;
-          });
+          services.getExample($scope.item).then(
+            function(data) {
+              $scope.chain.example = data.data[0];
+              $scope.chain.example.path = $scope.item.folder;
+            });
         }));
+    }
+
+    $scope.deleteExampleImg = function(item) {
+      $scope.item = angular.copy(item);
+      $scope.images = $scope.item.screenshot;
+        $scope.item.path = $scope.chain.example.path = $scope.item.requirementId+$scope.item.functionalityId+$scope.item.exampleId;
+        $scope.imagesToRemove = [];
+
+
+      return ($uibModal.open({
+          templateUrl: './views/admin/exampleImg_delete.html',
+          scope: $scope
+        }).result.then(function() {
+
+          $scope.item.imagesToRemove = $scope.imagesToRemove;
+
+          services.deleteExampleImg($scope.item).then(
+            function() {
+              services.getExample($scope.item).then(
+                function(data) {
+                  $scope.chain.example = data.data[0];
+                  $scope.chain.example.path = $scope.item.path;
+                });
+            });
+        }));
+$route.reload();
+    }
+
+    $scope.deleteImg = function(img) {
+      for (var i = 0; i < $scope.images.length; i++) {
+        if (  $scope.images[i] == img) {
+          $scope.images.splice(i, 1);
+        }
+      }
+          $scope.imagesToRemove.push(img);
     }
 
     $scope.$watch('chain.step', function(newVal, oldVal) {

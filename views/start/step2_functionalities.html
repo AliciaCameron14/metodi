@@ -5,7 +5,7 @@
 
 <div class="col-lg-10 tableContainer shadow">
   <div ng-if="user.userType == 0 && editMode" class="col-lg-3">
-    <i class="fa fa-2x fa-plus-circle" ng-click="addFunctionality()" aria-hidden="true"></i> add functionality
+    <i class="btn fa fa-2x fa-plus-circle" ng-click="addFunctionality()" aria-hidden="true"></i> add functionality
   </div>
 <table class="col-lg-12">
   <tr>
@@ -21,7 +21,7 @@
 {{functionality.description}}
  <!-- <div ng-if="user.userType == 0 && editMode"> -->
  <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteFunctionality(functionality) " aria-hidden="true" ></i>
-<i ng-if="user.userType == 0 && editMode" class="fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editFunctionality(functionality) " aria-hidden="true"></i>
+<i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editFunctionality(functionality) " aria-hidden="true"></i>
 <!-- </div> -->
     </td>
     <td class="tdBtn">

@@ -4,7 +4,7 @@
       <div class="text-center block col-lg-4">
         <div ng-if="user.userType == 0 && editMode">
          <i class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteRequirement(requirement) " aria-hidden="true" ></i>
-        <i class="fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editRequirement(requirement) "aria-hidden="true"></i>
+        <i class="btn fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editRequirement(requirement) "aria-hidden="true"></i>
         </div>
           <p class="shadow">{{requirement.description}}
           </p>
@@ -13,5 +13,5 @@
 </div>
 
 <div ng-if="user.userType == 0 && editMode" class="col-lg-2 col-lg-offset-1">
-  <i class="fa fa-2x fa-plus-circle" ng-click="addRequirement()" aria-hidden="true"></i> add requirement
+  <i class="btn fa fa-2x fa-plus-circle" ng-click="addRequirement()" aria-hidden="true"></i> add requirement
 </div>
