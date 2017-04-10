@@ -1,10 +1,13 @@
 <?php
 
 require '../FirePHPCore/fb.php';
+require '../PHPMailer/PHPMailerAutoload.php';
 require_once("Rest.php");
 
 
 if (!isset($_SESSION)) {
+  ini_set('session.gc_maxlifetime', 30);
+  session_set_cookie_params(30);
     session_start();
 }
 
@@ -142,6 +145,18 @@ class API extends REST
         $this->response($this->json($error), 400);
     }
 
+    private function forgotPassword()
+    {
+      $emailAddress = json_decode(file_get_contents("php://input"), true);
+
+      FB::info($emailAddress);
+
+      $mail = new PHPMailer();
+
+
+
+    }
+
     private function getRequirements()
     {
         if ($this->get_request_method() != "POST") {
@@ -155,16 +170,16 @@ class API extends REST
             $comma_separated = implode("','", $id);
             $ids = "'" . $comma_separated . "'";
 
-            $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement WHERE requirementId IN (?) order by requirementId asc');
+            $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement WHERE requirementId IN (?) order by requirementId * 1');
             $query->bind_param('s', $ids);
 
             // $query           = "SELECT requirementId, description FROM requirement WHERE requirementId IN ($ids) order by requirementId asc";
         } elseif ($id) {
-            $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement WHERE requirementId = $id order by requirementId asc');
+            $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement WHERE requirementId = $id order by requirementId * 1');
             $query->bind_param('s', $id);
             // $query = "SELECT requirementId, description FROM requirement WHERE requirementId = '$id' order by requirementId asc";
         } else {
-            $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId asc');
+            $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId * 1');
             // $query = "SELECT requirementId, description FROM requirement order by requirementId asc";
         }
 
@@ -193,12 +208,13 @@ class API extends REST
         $id    = $requirement['requirementId'];
 
         if ($id) {
-          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE requirementId = ? order by functionalityId asc');
+          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline, links FROM functionality WHERE requirementId = ? order by functionalityId * 1');
             $query->bind_param('s', $id);
-            // $query = "SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE requirementId = '$id' order by functionalityId asc";
+
         } else {
-          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality order by functionalityId asc');
-            // $query = "SELECT requirementId, functionalityId, description, framework, guideline FROM functionality order by functionalityId asc";
+          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline, links FROM functionality order by functionalityId * 1');
+
+
         }
 
         $query->execute();
@@ -210,7 +226,20 @@ class API extends REST
             $result = array();
 
             while ($row = $r->fetch_assoc()) {
-                $result[] = array_map('utf8_encode', $row);
+              foreach ($row as $key => $value) {
+                  $row[$key] = utf8_encode($value);
+
+                  if ($key == 'links') {
+                      $row[$key] = array_map(function($element)
+                      {
+                          return $element;
+                      }, explode(",", $value));
+                  }
+              }
+              $result[] = array_map(function($element)
+              {
+                  return $element;
+              }, $row);
             }
             $this->response($this->json($result), 200); // send user details
         }
@@ -229,13 +258,13 @@ class API extends REST
 
         if ($id) {
 
-          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId asc');
+          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId * 1');
             $query->bind_param('ss', $requirementId, $id);
 
         }
 
         else {
-            $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example order by exampleId asc');
+            $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example order by exampleId * 1');
         }
 
         $query->execute();
@@ -319,7 +348,7 @@ class API extends REST
         $query->execute();
         if ($this->mysqli->affected_rows >= 0) {
 
-              $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId asc');
+              $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId * 1');
 
           $query->execute();
           $r = $query->get_result();
@@ -353,7 +382,7 @@ class API extends REST
         $query->execute();
         if ($this->mysqli->affected_rows >= 0) {
 
-              $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId asc');
+              $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId * 1');
 
           $query->execute();
           $r = $query->get_result();
@@ -386,7 +415,7 @@ class API extends REST
         $query->execute();
         if ($this->mysqli->affected_rows >= 0) {
 
-              $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId asc');
+              $query = $this->mysqli->prepare('SELECT requirementId, description FROM requirement order by requirementId * 1');
 
           $query->execute();
           $r = $query->get_result();
@@ -428,7 +457,7 @@ class API extends REST
         $query->execute();
         if ($this->mysqli->affected_rows >= 0) {
 
-          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE requirementId = ? order by functionalityId asc');
+          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline, links FROM functionality WHERE requirementId = ? order by functionalityId * 1');
             $query->bind_param('s', $oldRequirementId);
 
           $query->execute();
@@ -438,7 +467,81 @@ class API extends REST
               $result = array();
 
               while ($row = $r->fetch_assoc()) {
-                  $result[] = array_map('utf8_encode', $row);
+                foreach ($row as $key => $value) {
+                    $row[$key] = utf8_encode($value);
+
+                    if ($key == 'links') {
+                        $row[$key] = array_map(function($element)
+                        {
+                            return $element;
+                        }, explode(",", $value));
+                    }
+                }
+                $result[] = array_map(function($element)
+                {
+                    return $element;
+                }, $row);
+              }
+              $this->response($this->json($result), 200); // send user details
+          }
+        }
+        $this->response('', 204); // If no records "No Content" status
+    }
+
+    private function addFunctionalityLinks()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $functionality = json_decode(file_get_contents("php://input"), true);
+        $requirementId = $functionality['requirementId'];
+        $functionalityId = $functionality['functionalityId'];
+        $linkObjects = $functionality['links'];
+        $links = array();
+
+
+        foreach ($linkObjects as $key => $value) {
+          // FB::info($value);
+          array_push($links, $value['name']);
+        }
+        $links = implode(",", $links);
+
+
+        if ($functionality) {
+            $query = $this->mysqli->prepare('UPDATE functionality SET links = ? WHERE functionalityId = ? AND requirementId = ? ');
+
+            $query->bind_param('sss', $links, $functionalityId, $requirementId);
+        }
+
+
+         $query->execute();
+        if ($this->mysqli->affected_rows >= 0) {
+
+          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline, links FROM functionality WHERE functionalityId = ? AND requirementId = ? order by functionalityId * 1');
+            $query->bind_param('ss', $functionalityId, $requirementId);
+
+          $query->execute();
+          $r = $query->get_result();
+
+          if ($r->num_rows > 0) {
+              $result = array();
+
+              while ($row = $r->fetch_assoc()) {
+                  foreach ($row as $key => $value) {
+                      $row[$key] = utf8_encode($value);
+
+                      if ($key == 'links') {
+                          $row[$key] = array_map(function($element)
+                          {
+                              return $element;
+                          }, explode(",", $value));
+                      }
+                  }
+                  $result[] = array_map(function($element)
+                  {
+                      return $element;
+                  }, $row);
               }
               $this->response($this->json($result), 200); // send user details
           }
@@ -465,7 +568,7 @@ class API extends REST
         $query->execute();
         if ($this->mysqli->affected_rows >= 0) {
 
-          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE requirementId = ? order by functionalityId asc');
+          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline, links FROM functionality WHERE requirementId = ? order by functionalityId * 1');
             $query->bind_param('s', $requirementId);
 
 
@@ -476,7 +579,20 @@ class API extends REST
               $result = array();
 
               while ($row = $r->fetch_assoc()) {
-                  $result[] = array_map('utf8_encode', $row);
+                foreach ($row as $key => $value) {
+                    $row[$key] = utf8_encode($value);
+
+                    if ($key == 'links') {
+                        $row[$key] = array_map(function($element)
+                        {
+                            return $element;
+                        }, explode(",", $value));
+                    }
+                }
+                $result[] = array_map(function($element)
+                {
+                    return $element;
+                }, $row);
               }
               $this->response($this->json($result), 200); // send user details
           }
@@ -502,7 +618,7 @@ class API extends REST
         $query->execute();
         if ($this->mysqli->affected_rows >= 0) {
 
-          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline FROM functionality WHERE requirementId = ? order by functionalityId asc');
+          $query = $this->mysqli->prepare('SELECT requirementId, functionalityId, description, framework, guideline, links FROM functionality WHERE requirementId = ? order by functionalityId * 1');
             $query->bind_param('s', $requirementId);
 
           $query->execute();
@@ -512,7 +628,20 @@ class API extends REST
               $result = array();
 
               while ($row = $r->fetch_assoc()) {
-                  $result[] = array_map('utf8_encode', $row);
+                foreach ($row as $key => $value) {
+                    $row[$key] = utf8_encode($value);
+
+                    if ($key == 'links') {
+                        $row[$key] = array_map(function($element)
+                        {
+                            return $element;
+                        }, explode(",", $value));
+                    }
+                }
+                $result[] = array_map(function($element)
+                {
+                    return $element;
+                }, $row);
               }
               $this->response($this->json($result), 200); // send user details
           }
@@ -539,6 +668,8 @@ class API extends REST
         } else $oldFunctionalityId = $example['functionalityId'];
 
         if ($example) {
+
+          // $example = filter_var($example, FILTER_SANITIZE_SPECIAL_CHARS);
             $query = $this->mysqli->prepare('UPDATE example INNER JOIN functionality ON example.functionalityId = functionality.functionalityId SET example.functionalityId = ?, example.title = ?, example.description = ?, example.targetGroup = ? WHERE example.exampleId = ? AND example.functionalityId = ? AND functionality.requirementId = ?');
 
             $query->bind_param('sssssss', $functionalityId, $title, $desc, $targetGroup, $exampleId, $oldFunctionalityId, $requirementId);
@@ -547,7 +678,7 @@ class API extends REST
         $query->execute();
         if ($this->mysqli->affected_rows >= 0) {
 
-          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId asc');
+          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId * 1');
             $query->bind_param('ss', $requirementId, $oldFunctionalityId);
 
           $query->execute();
@@ -557,7 +688,7 @@ class API extends REST
               $result = array();
 
               while ($row = $r->fetch_assoc()) {
-                  $result[] = array_map('utf8_encode', $row);
+                  $result[] = array_map('utf8_decode', $row);
               }
               $this->response($this->json($result), 200); // send user details
           }
@@ -576,7 +707,11 @@ class API extends REST
         $requirementId = $example['requirementId'];
         $functionalityId = $example['functionalityId'];
         $title = $example['title'];
-        $targetGroup = $example['targetGroup'];
+
+        if (array_key_exists('targetGroup', $example)) {
+          $targetGroup = $example['targetGroup'];
+        } $targetGroup = "";
+
 
         if ($example) {
             $query = $this->mysqli->prepare('INSERT INTO example (requirementId, functionalityId, exampleId, title, targetGroup) VALUES(?,?,?,?,?)');
@@ -586,7 +721,7 @@ class API extends REST
         $query->execute();
         if ($this->mysqli->affected_rows >= 0) {
 
-          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId asc');
+          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId * 1');
             $query->bind_param('ss', $requirementId, $functionalityId);
 
           $query->execute();
@@ -599,9 +734,9 @@ class API extends REST
                   $result[] = array_map('utf8_encode', $row);
               }
               $this->response($this->json($result), 200); // send user details
-          }
+          }$this->response('', 204); // If no records "No Content" status
         }
-        $this->response('', 500); // If no records "No Content" status
+
     }
 
     private function deleteExample()
@@ -623,7 +758,7 @@ class API extends REST
         $query->execute();
         if ($this->mysqli->affected_rows >= 0) {
 
-          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId asc');
+          $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE requirementId = ? AND functionalityId = ? order by exampleId * 1');
             $query->bind_param('ss', $requirementId, $functionalityId);
 
           $query->execute();
@@ -724,7 +859,7 @@ $images = implode(",", $dirContents);
       $functionalityId = $example['functionalityId'];
 
       if ($example) {
-        $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE exampleId = ? AND functionalityId = ? AND requirementId = ? order by exampleId asc');
+        $query = $this->mysqli->prepare('SELECT functionalityId, exampleId, title, description, targetGroup, screenshot, requirementId FROM example WHERE exampleId = ? AND functionalityId = ? AND requirementId = ? order by exampleId * 1');
 
         $query->bind_param('sss', $exampleId, $functionalityId, $requirementId);
 

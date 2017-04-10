@@ -1,5 +1,5 @@
 var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'route-segment',
-  'view-segment', 'ngIdle', 'd3', 'ui.toggle', 'angularFileUpload'
+  'view-segment', 'ngIdle', 'd3' ,'ui.toggle', 'angularFileUpload','ngSanitize'
 ]);
 
 app.config(['KeepaliveProvider', 'IdleProvider', 'TitleProvider', function(KeepaliveProvider, IdleProvider, TitleProvider) {
@@ -33,6 +33,13 @@ obj.getChain = function() {
 
   obj.login = function(user) {
     return $http.post(serviceBase + 'login', user).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.forgotPassword = function(email) {
+    return $http.post(serviceBase + 'forgotPassword', email).then(function(
       results) {
       return results;
     });
@@ -127,6 +134,13 @@ obj.getChain = function() {
 
   obj.deleteFunctionality = function(func) {
     return $http.post(serviceBase + 'deleteFunctionality', func).then(function(
+      results) {
+      return results;
+    });
+  };
+
+  obj.addFunctionalityLinks = function(func) {
+    return $http.post(serviceBase + 'addFunctionalityLinks', func).then(function(
       results) {
       return results;
     });
@@ -232,74 +246,3 @@ function getWords(){
 return {getWords:getWords};
 
 }]);
-
-// app.run(['Idle', function(Idle) {
-//   Idle.watch();
-// }]);
-
-// app.run(['$location', '$rootScope', function($location, $rootScope) {
-//     $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
-//         $rootScope.title = current.$$route.title;
-//     });
-// }]);
-
-// app.service('server', ['$rootScope', '$http', '$q', '$uibModal', function ($rootScope, $http, $q, $uibModal) {
-
-//  $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-
-// this.call =  function (controller, action, data, noDefaultError, abortPromise, retryInterval) {
-
-// $http.post('/metodi/index.php/user/do_add_user',data).then( function (response) {
-//   console.log(response);
-// });
-
-//     var runCall, key, obj = this;
-// if (!retryInterval) { retryInterval = 1000; }
-// if (!data) { data = {}; }
-// var promise = $q(function (resolve, reject) {
-//    var createCall, config = (abortPromise && abortPromise.promise) ? { timeout: abortPromise.promise } : null;
-//    createCall = function () {
-//       $http.post(actionUrl(controller, action), data, config).then(
-//
-//          function (response) {   console.log("RESPONSE");
-//            console.dir(response);resolve(response.data); },
-//          function (response) {
-//             if (response.status >= 300 && response.status < 600) {
-//
-//                var error = response.data;
-//                if (!error || !error.error) { error = { error: 1, message: error || 'Server error.' }; }
-//                error.status = response.status;
-//                if (!noDefaultError) {
-//                   var scope = $rootScope.$new();
-//                   scope.controller = controller;
-//                   scope.action = action;
-//                   scope.data = data;
-//                   scope.error = error;
-//                   $modal.open({
-//                      templateUrl: './views/error.html',
-//                      scope: scope
-//                   });
-//                }
-//                reject(error);
-//                return;
-//             }
-//             setTimeout(createCall, retryInterval);
-//             retryInterval *= 2;
-//             if (retryInterval > 60000) { retryInterval = 60000; }
-//          }
-//       );
-//    };
-//    createCall();
-// });
-// return (promise);
-// };
-
-// }]
-
-// );
-
-// function actionUrl (controller, action)
-// {
-//   console.log("actionUrl function");
-//    return ('/metodi/' + 'index.php/' + controller + '/' + action + '/');
-// }

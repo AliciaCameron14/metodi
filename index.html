@@ -20,6 +20,7 @@
         <script src="./js/000-lib/008-angular-d3.js"></script>
         <script src="./js/000-lib/009-angular-bootstrap-toggle.min.js"></script>
         <script src="./js/000-lib/010-angular-file-upload.min.js"></script>
+        <script src="./js/000-lib/011-angular-sanitize.min.js"></script>
 
         <!-- AngularJS -->
         <script src="./js/100-modules/101-app.js"></script>
@@ -47,13 +48,12 @@
                 <div ng-if="user && userLoggedIn == true">
                     <header class="menu col-lg-8 col-lg-offset-2">
                         <div class="col-lg-9">
-                            <i class="fa fa-circle fa-4x" aria-hidden="true"></i>
-                            <h1 style="display:inline;">METODI</h1>
+                          <img ng-src="{{ './content/logo.png'}}" alt="">
                         </div>
 
                         <div class="col-lg-3">
                             <div style="float:right;" class="dropdown">
-                                <div class="dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span>{{user.firstName + " " + user.familyName}}</div>
+                                <div class="dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-lg fa-caret-down" aria-hidden="true"></i><strong ng-bind-html="user.firstName + ' ' + user.familyName"></strong></div>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a href="#">Account Settings</a>
@@ -88,119 +88,3 @@
     </body>
 
     </html>
-
-    <!-- <?php -->
-    <!-- // require 'FirePHPCore/fb.php';
-    // include_once './system/system.php';
-    // include_once '/services/api.php';
-
-    // define('BASEPATH', dirname(__FILE__) . '/');
-    // chdir(BASEPATH);
-    // setlocale(LC_ALL, 'nl_NL');
-
-
-
-    // if (defined('URI_PATH')) { $req = URI_PATH; }
-    // else { $req = substr($_SERVER['REQUEST_URI'], strlen($_SERVER['SCRIPT_NAME'])); }
-    //
-    // $controller = $GLOBALS['config']['default_controller'];
-    // $action = $GLOBALS['config']['default_action'];
-    // $params = null;
-    //
-    // $req = explode('?', $req);
-    // $data = explode('/', $req[0]);
-    // $count = count($data);
-    // if ($count > 1 && $data[1])
-    // {
-    //    $controller = $data[1];
-    //    if ($count > 2 && $data[2])
-    //    {
-    //       $action = $data[2];
-    //       if (!$action || $action == '') { $action = 'index'; }
-    //       if ($count > 3) { $params = array_slice($data, 3, $count - 3, false); }
-    //    }
-    // }
-    //
-    // $namedParams = input();
-    // if (!$namedParams || count($namedParams) == 0) { $namedParams = null; }
-    //
-    // $staticCount = 0;
-    // if ($params) { $staticCount = count($params); }
-
-    // function getCurrentController() { global $controller; return ($controller); }
-    // function getCurrentAction() { global $action; return ($action); }
-    // function ifCurrentAction($a, $true, $false = '') { return (strcasecmp(getCurrentAction(), $a) == 0 ? $true : $false); }
-    //
-    // include_once '/controllers/' . $controller . '.php';
-    // $class = ucfirst($controller);
-    //
-    // if (!class_exists($class))
-    // {
-    //    handlePHPError(1, 'Controller not found: ' . $class, __FILE__, __LINE__);
-    //    exit();
-    // }
-    //
-    // $reflector = new ReflectionClass($class);
-    //
-    // if (!$reflector->hasMethod($action))
-    // {
-    //    handlePHPError(1, 'Method not found on ' . $class . ': ' . $action, __FILE__, __LINE__);
-    //    exit();
-    // }
-    //
-    // $method = $reflector->getMethod($action);
-    //
-    // if (!$method->isPublic())
-    // {
-    //    handlePHPError(1, 'Method ' . $action . ' is not public', __FILE__, __LINE__);
-    //    exit();
-    // }
-    //
-    // $invokeParams = array();
-    // foreach ($method->getParameters() as $p)
-    // {
-    //    if ($namedParams)
-    //    {
-    //       $name = $p->getName();
-    //       if (isset($namedParams[$name]))
-    //       {
-    //          $invokeParams[] = $namedParams[$name];
-    //          continue;
-    //       }
-    //    }
-    //    $i = count($invokeParams);
-    //    if ($i < $staticCount)
-    //    {
-    //       $invokeParams[] = $params[$i];
-    //       continue;
-    //    }
-    //    if ($p->isDefaultValueAvailable())
-    //    {
-    //       $invokeParams[] = $p->getDefaultValue();
-    //       continue;
-    //    }
-    //    $invokeParams[] = null;
-    // }
-    //
-    // try
-    // {
-    //    $obj = $reflector->newInstance($db);
-    //    $data = $method->invokeArgs($obj, $invokeParams);
-    //    if ($data !== null)
-    //    {
-    //       if (($paging = getPagedRequestDetails()) && !isset(startJsonOutput()->count))
-    //       {
-    //          outputTotalCount($count = count($data));
-    //          if ($count > $paging->pagingItemCount) { $count = $paging->pagingItemCount; }
-    //          $data = array_slice($data, $paging->pagingItemOffset, $count, true);
-    //       }
-    //       outputData('returnValue', $data);
-    //    }
-    // }
-    // catch (Exception $error)
-    // {
-    //    outputFail($error->getMessage());
-    // }
-    //
-    // endScript(); -->
-     <!-- // ?> -->

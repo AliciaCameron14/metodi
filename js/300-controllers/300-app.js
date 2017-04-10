@@ -116,6 +116,19 @@ app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
         }));
     };
 
+    $scope.forgotPassword = function() {
+      $scope.item = {};
+      return ($uibModal.open({
+          templateUrl: './views/login/forgotPassword.html',
+          scope: $scope
+        })
+        .result.then(function() {
+          services.forgotPassword($scope.item).then(function(data) {
+
+          });
+        }));
+    };
+
     $scope.toggleEditMode = function() {
       $scope.editMode = !$scope.editMode;
     };

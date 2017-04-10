@@ -8,9 +8,7 @@
   <div style="float:right;" ng-if="user.userType == 0 && editMode">
     <i class="fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editExampleDesc(chain.example) " aria-hidden="true"></i>
   </div>
-  <div class="col-lg-12">
-    {{chain.example.description}}
-  </div>
+  <div ng-bind-html="chain.example.description" class="col-lg-12"></div>
 
 
 </div>

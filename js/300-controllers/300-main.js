@@ -1,7 +1,7 @@
 //Split into separate controllers?
 
-app.controller('mainController', ['$scope', '$rootScope', '$route', 'services', '$location', 'steps', 'chain','requirements', '$uibModal', 'FileUploader',
-  function($scope, $rootScope, $route, services, $location, steps, chain, requirements, $uibModal, FileUploader) {
+app.controller('mainController', ['$scope', '$rootScope', '$route', 'services', '$location', 'steps', 'chain','requirements', '$uibModal', 'FileUploader', '$sce',
+  function($scope, $rootScope, $route, services, $location, steps, chain, requirements, $uibModal, FileUploader, $sce) {
 
 $scope.chain = {};
 $scope.functionalityTip = "Zie hieronder een lijst met functionaliteiten. Een functionaliteiten geeft een basisprincipe met concrete voorbeelden/implementaties weer, die je kan gebruiken om aan de bovenliggende requirement tegemoet te komen.";
@@ -55,6 +55,7 @@ return ($uibModal.open({
             if (data) {
               $scope.allRequirements = data.data;
             }
+            watchChain();
           });
         }));
     }
@@ -69,6 +70,7 @@ return ($uibModal.open({
             if (data) {
               $scope.allRequirements = data.data;
             }
+              watchChain();
           });
         }));
     }
@@ -84,6 +86,7 @@ return ($uibModal.open({
             if (data) {
               $scope.allRequirements = data.data;
             }
+              watchChain();
           });
         }));
     }
@@ -100,6 +103,24 @@ return ($uibModal.open({
             if (data) {
               $scope.allFunctionalities = data.data;
             }
+              watchChain();
+          });
+        }));
+    }
+
+    $scope.editLinks = function(item){
+    $scope.item = angular.copy(item);
+    $scope.links = [];
+
+      return ($uibModal.open({
+          templateUrl: './views/admin/functionality_edit.html',
+          scope: $scope
+        }).result.then(function() {
+          services.editFunctionality($scope.item).then(function(data) {
+            if (data) {
+              $scope.allFunctionalities = data.data;
+            }
+              watchChain();
           });
         }));
     }
@@ -116,6 +137,7 @@ return ($uibModal.open({
             if (data) {
               $scope.allFunctionalities = data.data;
             }
+              watchChain();
           });
         }));
     }
@@ -131,6 +153,7 @@ return ($uibModal.open({
             if (data) {
               $scope.allFunctionalities = data.data;
             }
+              watchChain();
           });
         }));
     }
@@ -147,6 +170,7 @@ return ($uibModal.open({
               $scope.allFunctionalities = data.data;
             }
               $scope.chain.functionality =   $scope.item;
+                watchChain();
           });
         }));
     }
@@ -162,10 +186,13 @@ return ($uibModal.open({
           templateUrl: './views/admin/example_edit.html',
           scope: $scope
         }).result.then(function() {
+
           services.editExample($scope.item).then(function(data) {
             if (data) {
               $scope.allExamples = data.data;
             }
+            $scope.chain.example = $scope.item;
+              watchChain();
           });
         }));
     }
@@ -184,6 +211,7 @@ return ($uibModal.open({
             if (data) {
               $scope.allExamples = data.data;
             }
+              watchChain();
           });
         }));
     }
@@ -199,6 +227,7 @@ return ($uibModal.open({
             if (data) {
               $scope.allExamples = data.data;
             }
+              watchChain();
           });
         }));
     }
@@ -215,6 +244,7 @@ return ($uibModal.open({
               $scope.allExamples = data.data;
             }
               $scope.chain.example =   $scope.item;
+              watchChain();
           });
         }));
     }
@@ -249,6 +279,7 @@ return ($uibModal.open({
             function(data) {
               $scope.chain.example = data.data[0];
               $scope.chain.example.path = $scope.item.folder;
+                watchChain();
             });
         }));
     }
@@ -273,6 +304,7 @@ return ($uibModal.open({
                 function(data) {
                   $scope.chain.example = data.data[0];
                   $scope.chain.example.path = $scope.item.path;
+                    watchChain();
                 });
             });
         }));
@@ -286,49 +318,106 @@ $route.reload();
         }
       }
           $scope.imagesToRemove.push(img);
+            watchChain();
     }
 
-    $scope.$watch('chain.step', function(newVal, oldVal) {
+    $scope.addLink = function() {
+      services.getFunctionalities().then(
+        function(data) {
+          $scope.allFunctionalities = data.data;
+          $scope.links = [];
+          $scope.item = $scope.chain.functionality;
 
-      switch ($scope.chain.step) {
-        case 1:
-          $scope.chain.requirement = $scope.chain.functionality =
-            $scope.chain.example = {};
-          if (!$scope.allRequirements) {
-            services.getRequirements().then(function(data) {
-              $scope.allRequirements = data.data;
-            });
+          for (var i = 0; i < $scope.allFunctionalities.length; i++) {
+            if (  ($scope.allFunctionalities[i].functionalityId == $scope.chain.functionality.functionalityId) && ($scope.allFunctionalities[i].requirementId == $scope.chain.functionality.requirementId)) {
+              $scope.allFunctionalities.splice(i,1);
+            }
           }
-          services.updateChain($scope.chain);
-          break;
+        });
 
-        case 2:
-          $scope.chain.functionality = $scope.chain.example = {};
-          services.getFunctionalities($scope.chain.requirement).then(
-            function(data) {
-              $scope.allFunctionalities = data.data;
-            });
-          services.updateChain($scope.chain);
-          break;
+      return ($uibModal.open({
+          templateUrl: './views/admin/functionalityLink_add.html',
+          scope: $scope
+        }).result.then(function() {
 
-        case 3:
-          $scope.chain.example = {};
-          services.getExamples($scope.chain.functionality).then(
-            function(data) {
-              $scope.allExamples = data.data;
-            });
-          services.updateChain($scope.chain);
-          break;
+          $scope.item.links = $scope.links;
+          console.log($scope.item);
 
-          case 4:
-          services.updateChain($scope.chain);
-          break;
+          services.addFunctionalityLinks($scope.item).then(function(data){
+            $scope.chain.functionality = data.data;
+          });
 
-        default:
-          // services.updateChain($scope.chain);
+        }));
+          watchChain();
+    }
+
+    $scope.addFuncLink = function(link){
+      var item = {};
+      item.name = link.requirementId + link.functionalityId;
+      item.desc = link.description;
+
+if (link) {
+
+  var found = false;
+  for(var i = 0; i < $scope.links.length; i++) {
+
+      if ($scope.links[i].name == item.name) {
+          found = true;
+          break;
       }
+  }
+        if (!found) {
+      $scope.links.push(item);
+  }
+}
+    }
 
-    });
+    $scope.selectLink = function(link) {
+      $sc
+    }
+
+
+    var watchChain  = function(){
+
+            switch ($scope.chain.step) {
+              case 1:
+                $scope.chain.requirement = $scope.chain.functionality =
+                  $scope.chain.example = {};
+                if (!$scope.allRequirements) {
+                  services.getRequirements().then(function(data) {
+                    $scope.allRequirements = data.data;
+                  });
+                }
+                services.updateChain($scope.chain);
+                break;
+
+              case 2:
+                $scope.chain.functionality = $scope.chain.example = {};
+                services.getFunctionalities($scope.chain.requirement).then(
+                  function(data) {
+                    $scope.allFunctionalities = data.data;
+                  });
+                services.updateChain($scope.chain);
+                break;
+
+              case 3:
+                $scope.chain.example = {};
+                services.getExamples($scope.chain.functionality).then(
+                  function(data) {
+                    $scope.allExamples = data.data;
+                  });
+                services.updateChain($scope.chain);
+                break;
+
+                case 4:
+                services.updateChain($scope.chain);
+                break;
+
+              default:
+                // services.updateChain($scope.chain);
+            }
+    }
+    $scope.$watch('chain.step', watchChain );
 
   }
 ]);

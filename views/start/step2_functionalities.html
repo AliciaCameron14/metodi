@@ -18,7 +18,7 @@
   </tr>
   <tr ng-repeat="functionality in allFunctionalities">
     <td>
-{{functionality.description}}
+      <span ng-bind-html="functionality.description"></span>
  <!-- <div ng-if="user.userType == 0 && editMode"> -->
  <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteFunctionality(functionality) " aria-hidden="true" ></i>
 <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editFunctionality(functionality) " aria-hidden="true"></i>

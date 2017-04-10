@@ -1,10 +1,9 @@
 <div class="login col-lg-offset-4 col-md-offset-3 col-sm-offset-3 col-lg-4 col-md-4 col-sm-4">
     <div class="modal-header">
-        <i class="fa fa-circle fa-4x" aria-hidden="true"></i>
-        <h1 style="display:inline;">METODI</h1>
+  <img ng-src="{{ './content/logo.png'}}" alt="">
     </div>
     <div class="modal-body">
-        <form  name="form" novalidate>
+        <form name="form" >
             <div class="form-group row">
                 <label style="width: 130px;" for="username" class="col-sm-offset-1 col-sm-3">Gebruikersnaam:</label>
                 <div class="col-md-7 col-lg-7">
@@ -21,11 +20,11 @@
                 <a class="col-sm-offset-1 col-sm-12" href="#" ng-click="register()">Ik ben nieuw en wens een account! </a>
             </div>
             <div class="row">
-                <a class="col-sm-offset-1 col-sm-12" href="#">Wachtwoord Vergeten?</a>
+                <a class="col-sm-offset-1 col-sm-12" href="#" ng-click="forgotPassword()">Wachtwoord Vergeten?</a>
             </div>
-        </form>
     </div>
     <div class="modal-footer">
         <button type="submit" class="btn btn-primary" ng-click="login()">Login</button>
     </div>
+  </form>
 </div>

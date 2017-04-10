@@ -4,19 +4,19 @@ app.controller('loginController', ['$scope', '$location', '$rootScope',
 
     $scope.user = {};
 
-    $scope.login = function() {
-      services.login($scope.user).then(function(data) {
-        if (data.data) { //user exists
-          $rootScope.user =  $scope.user = data.data;
-          $rootScope.userLoggedIn = true;
-          $scope.chain = steps.chain = {step: {}, requirement: {}, functionality: {}, example: {}};
-       steps.chain.step = 1;
-       Idle.watch();
-          $location.path('/requirements');
-          $route.reload();
-        }
-      });
-    };
+    // $scope.login = function() {
+    //   services.login($scope.user).then(function(data) {
+    //     if (data.data) { //user exists
+    //       $rootScope.user =  $scope.user = data.data;
+    //       $rootScope.userLoggedIn = true;
+    //       $scope.chain = steps.chain = {step: {}, requirement: {}, functionality: {}, example: {}};
+    //    steps.chain.step = 1;
+    //    Idle.watch();
+    //       $location.path('/requirements');
+    //       $route.reload();
+    //     }
+    //   });
+    // };
 
     //   $scope.forgotPassword = function (user)
     //   {
