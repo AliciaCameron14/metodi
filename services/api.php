@@ -229,7 +229,7 @@ class API extends REST
               foreach ($row as $key => $value) {
                   $row[$key] = utf8_encode($value);
 
-                  if ($key == 'links') {
+                  if ($key == 'links' && $value != "") {
                       $row[$key] = array_map(function($element)
                       {
                           return $element;
@@ -488,7 +488,7 @@ class API extends REST
         $this->response('', 204); // If no records "No Content" status
     }
 
-    private function addFunctionalityLinks()
+    private function editFunctionalityLinks()
     {
         if ($this->get_request_method() != "POST") {
             $this->response('', 406);
@@ -503,7 +503,7 @@ class API extends REST
 
         foreach ($linkObjects as $key => $value) {
           // FB::info($value);
-          array_push($links, $value['name']);
+          array_push($links, $value);
         }
         $links = implode(",", $links);
 
@@ -798,8 +798,8 @@ class API extends REST
             // echo 'No files';
         }
 
-$dirContents = array_diff(scandir($path), array('..', '.'));
-$images = implode(",", $dirContents);
+        $dirContents = array_diff(scandir($path), array('..', '.'));
+        $images = implode(",", $dirContents);
 
         if ($images) {
             $query = $this->mysqli->prepare('UPDATE example SET screenshot = ? WHERE exampleId = ? AND functionalityId = ? AND requirementId = ?');

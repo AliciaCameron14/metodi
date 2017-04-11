@@ -139,8 +139,8 @@ obj.getChain = function() {
     });
   };
 
-  obj.addFunctionalityLinks = function(func) {
-    return $http.post(serviceBase + 'addFunctionalityLinks', func).then(function(
+  obj.editFunctionalityLinks = function(func) {
+    return $http.post(serviceBase + 'editFunctionalityLinks', func).then(function(
       results) {
       return results;
     });

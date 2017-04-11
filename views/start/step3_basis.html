@@ -93,10 +93,12 @@
     </tr>
     <tr ng-repeat="link in chain.functionality.links" >
       <td>
-        <span ng-bind-html="link"></span>
-   <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); editFunctionality(functionality) " aria-hidden="true"></i>
+        <span>{{link.substr(link.indexOf('F'))}}</span>
+
+   <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteFuncLink(link) " aria-hidden="true"></i>
       </td>
   <td>
+    <span>{{link.substring(0, link.indexOf('F'))}}</span>
 
   </td>
       <td class="tdBtn">

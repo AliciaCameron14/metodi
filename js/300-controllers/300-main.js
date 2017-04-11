@@ -327,8 +327,19 @@ $route.reload();
           $scope.allFunctionalities = data.data;
           $scope.links = [];
           $scope.item = $scope.chain.functionality;
+          // $scope.item.links = [];
 
-          for (var i = 0; i < $scope.allFunctionalities.length; i++) {
+
+          //remove current functionality from list
+          for (var i = $scope.allFunctionalities.length-1; i >= 0; i--) {
+
+            //remove already linked functionalities
+             for (var j = 0; j < $scope.chain.functionality.links.length; j++) {
+              if ($scope.chain.functionality.links[j] == ($scope.allFunctionalities[i].requirementId + $scope.allFunctionalities[i].functionalityId)) {
+              $scope.allFunctionalities.splice(i,1);
+              }
+            }
+
             if (  ($scope.allFunctionalities[i].functionalityId == $scope.chain.functionality.functionalityId) && ($scope.allFunctionalities[i].requirementId == $scope.chain.functionality.requirementId)) {
               $scope.allFunctionalities.splice(i,1);
             }
@@ -339,12 +350,12 @@ $route.reload();
           templateUrl: './views/admin/functionalityLink_add.html',
           scope: $scope
         }).result.then(function() {
+          for(var i = 0; i < $scope.links.length; i++) {
+            $scope.item.links.push($scope.links[i]['name']);
+          }
 
-          $scope.item.links = $scope.links;
-          console.log($scope.item);
-
-          services.addFunctionalityLinks($scope.item).then(function(data){
-            $scope.chain.functionality = data.data;
+          services.editFunctionalityLinks($scope.item).then(function(data){
+            $scope.chain.functionality = data.data[0];
           });
 
         }));
@@ -372,8 +383,37 @@ if (link) {
 }
     }
 
+
+$scope.deleteFuncLink = function(link) {
+  $scope.link = link;
+  $scope.item = angular.copy($scope.chain.functionality);
+  // $scope.links = $scope.chain.functionality.links;
+
+  return ($uibModal.open({
+      templateUrl: './views/admin/functionalityLink_delete.html',
+      scope: $scope
+    }).result.then(function() {
+      for (var i = 0; i < $scope.item.links.length; i++) {
+        if ($scope.item.links[i] == $scope.link) {
+          $scope.item.links.splice(i, 1);
+        }
+      }
+      // $scope.chain.functionality.links = $scope.links;
+      services.editFunctionalityLinks($scope.item).then(function(data){
+        $scope.chain.functionality = data.data[0];
+      });
+    }));
+
+// $route.reload();
+}
+
     $scope.selectLink = function(link) {
-      $sc
+      // $sc
+    }
+
+
+    $scope.getName = function(link, end) {
+
     }
 
 
