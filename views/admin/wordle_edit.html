@@ -1,0 +1,113 @@
+<form name="form" novalidate class="">
+    <div class="modal-header"><strong>Edit Wordle</strong></div>
+    <div class="modal-body">
+      <!-- <div class="form-group">
+          <label>Woord</label>
+          <input type="text" class="form-control" ng-model="item.word" disabled />
+      </div> -->
+      <strong>Woord</strong>
+      <div class="form-group row">
+          <div class="col-lg-8 col-md-8 col-sm-8">
+            <select class="form-control" ng-model="selected" ng-change="findLinks(selected.word)">
+              <option ng-selected value="">Kies woord...</option>
+              <option ng-repeat="word in wordsData" ng-value="{{word}}">{{word.word}}</option>
+            </select>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2">
+            <button class="btn btn-success form-control" ng-click="addFuncLink(selected)"><i class="fa fa-plus"></i></button>
+          </div>
+      </div>
+
+<div ng-if="selected">
+
+  <div ng-if="requirementLinks.length >= 1" class="">
+    <strong>Requirement Links</strong>
+    <div class="row">
+      <div class="col-lg-10 col-md-10 col-sm-10" >
+        <div ng-repeat="reqLink in requirementLinks">
+          {{reqLink.requirementId + ' ' + reqLink.description}}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="" style="float:right;">
+    <i class="btn fa fa-2x fa-pencil" aria-hidden="true"></i>
+  </div>
+<div ng-if="functionalityLinks.length >= 1">
+  <strong>Functionality Links</strong>
+  <div class="row">
+    <div class="col-lg-10 col-md-10 col-sm-10" >
+      <div ng-repeat="funcLink in functionalityLinks">
+        {{funcLink.requirementId + funcLink.functionalityId + ' ' + funcLink.description}}
+      </div>
+    </div>
+    <!-- <div class="col-lg-4 col-md-4 col-sm-4">
+      <i class="btn fa fa-2x fa-pencil" aria-hidden="true"></i>
+    </div> -->
+  </div>
+</div>
+<div ng-if="exampleLinks.length >= 1">
+  <strong>Example Links</strong>
+  <div class="row">
+    <div class="col-lg-10 col-md-10 col-sm-10" >
+      <div ng-repeat="exLink in exampleLinks">
+        {{exLink.requirementId + exLink.functionalityId + exLink.exampleId + ' ' + exLink.title}}
+      </div>
+    </div>
+    <!-- <div class="col-lg-4 col-md-4 col-sm-4">
+      <i class="btn fa fa-2x fa-pencil" aria-hidden="true"></i>
+    </div> -->
+  </div>
+</div>
+
+
+</div>
+
+
+
+<!-- <strong>Requirement Links</strong>
+      <div class="form-group row">
+        <div class="col-lg-8 col-md-8 col-sm-8">
+          <select class="form-control" ng-model="selectedReq">
+            <option ng-selected value="">Kies requirement...</option>
+            <option ng-repeat="req in requirements" ng-value="{{req}}">{{req.requirementId + ' ' + req.description}}</option>
+          </select>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2">
+          <button class="btn btn-success form-control" ng-click="addFuncLink(selected)"><i class="fa fa-plus"></i></button>
+        </div>
+      </div> -->
+
+
+
+      <!-- <div class="form-group">
+          <strong>Functionaliteit Links</strong>
+          <select class="form-control" ng-model="selectedFunc">
+            <option ng-selected value="">Kies functionaliteit...</option>
+            <option ng-repeat="func in functionalities" ng-value="{{func}}">{{func.requirementId + func.functionalityId + ' ' + func.description}}</option>
+          </select>
+          <button class="btn btn-success" ng-click="addFuncLink(selected)"><i class="fa fa-plus"></i></button>
+      </div> -->
+
+      <!-- <div class="form-group">
+          <strong>Voorbeeld Links</strong>
+          <select class="form-control" ng-model="selectedEx">
+            <option ng-selected value="">Kies voorbeeld...</option>
+            <option ng-repeat="ex in examples" ng-value="{{ex}}">{{ex.requirementId + ex.functionalityId + ex.exampleId + ' ' + ex.title}}</option>
+          </select>
+          <button class="btn btn-success" ng-click="addFuncLink(selected)"><i class="fa fa-plus"></i></button>
+      </div> -->
+
+
+
+      <!-- <div ng-repeat="link in links">
+          <input type="text" class="form-control" value="{{link.name + ' ' + link.desc}}" readonly />
+      </div> -->
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" type="submit" ng-click="form.$valid?$close():0">Opslaan</button>
+        <button class="btn btn-default" type="button" ng-click="$dismiss()">Terug</button>
+    </div>
+</form>

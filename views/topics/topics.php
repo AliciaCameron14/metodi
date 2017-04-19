@@ -2,7 +2,7 @@
   <div ng-if="user.userType == 0 && editMode" >
     <i class="btn fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editWordle() " aria-hidden="true"></i> edit wordle
   </div>
-  <wordcloud words="words" on-click="selectWord(element)"></wordcloud>
+  <wordcloud words="words" on-click="selectWord(element.text)"></wordcloud>
 </div>
 <div class="col-lg-11"  ng-if="wordSelected">
   <div ng-if="requirementLinks.length">

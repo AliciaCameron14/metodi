@@ -1,7 +1,7 @@
 app.controller('topicsController', ['$scope', '$location', 'services', 'words',
-  '$route',
+  '$route', '$uibModal',
   function(
-    $scope, $location, services, words, $route) {
+    $scope, $location, services, words, $route, $uibModal) {
 
     $scope.wordSelected = false;
     $scope.words = words;
@@ -23,51 +23,56 @@ app.controller('topicsController', ['$scope', '$location', 'services', 'words',
     });
 
     $scope.selectWord = function(word) {
+
+      $scope.findLinks(word);
+      $scope.wordSelected = true;
+      $route.reload();
+    }
+
+    $scope.findLinks = function(word) {
       $scope.requirementLinks = [];
       $scope.functionalityLinks = [];
       $scope.exampleLinks = [];
 
-      for (var i = 0; i < $scope.wordsData.length; i++) {
-        if ($scope.wordsData[i].word == word.text) {
+            for (var i = 0; i < $scope.wordsData.length; i++) {
+              if ($scope.wordsData[i].word == word) {
 
-          //requirements
-          for (var j = 0; j < $scope.wordsData[i].requirements.length; j++) {
-            for (var k = 0; k < $scope.requirements.length; k++) {
-              if ($scope.requirements[k].requirementId == $scope.wordsData[
-                  i].requirements[j]) {
-                $scope.requirementLinks.push($scope.requirements[k]);
+                //requirements
+                for (var j = 0; j < $scope.wordsData[i].requirements.length; j++) {
+                  for (var k = 0; k < $scope.requirements.length; k++) {
+                    if ($scope.requirements[k].requirementId == $scope.wordsData[
+                        i].requirements[j]) {
+                      $scope.requirementLinks.push($scope.requirements[k]);
+                    }
+                  }
+                }
+
+                //functionalities
+                for (var m = 0; m < $scope.wordsData[i].functionalities.length; m++) {
+                  for (var n = 0; n < $scope.functionalities.length; n++) {
+                    if (($scope.functionalities[n].functionalityId == ($scope.wordsData[
+                        i].functionalities[m]).substr(2, 2)) && $scope.functionalities[
+                        n].requirementId == ($scope.wordsData[i].functionalities[
+                        m]).substr(0, 2)) {
+                      $scope.functionalityLinks.push($scope.functionalities[n]);
+                    }
+                  }
+                }
+
+                //examples
+                for (var a = 0; a < $scope.wordsData[i].examples.length; a++) {
+                  for (var s = 0; s < $scope.examples.length; s++) {
+                    if (($scope.examples[s].exampleId == ($scope.wordsData[i].examples[
+                        a]).substr(4, 2)) && ($scope.examples[s].functionalityId ==
+                        ($scope.wordsData[i].examples[a]).substr(2, 2)) && (
+                        $scope.examples[s].requirementId == ($scope.wordsData[i]
+                          .examples[a]).substr(0, 2))) {
+                      $scope.exampleLinks.push($scope.examples[s]);
+                    }
+                  }
+                }
               }
             }
-          }
-
-          //functionalities
-          for (var m = 0; m < $scope.wordsData[i].functionalities.length; m++) {
-            for (var n = 0; n < $scope.functionalities.length; n++) {
-              if (($scope.functionalities[n].functionalityId == ($scope.wordsData[
-                  i].functionalities[m]).substr(2, 2)) && $scope.functionalities[
-                  n].requirementId == ($scope.wordsData[i].functionalities[
-                  m]).substr(0, 2)) {
-                $scope.functionalityLinks.push($scope.functionalities[n]);
-              }
-            }
-          }
-
-          //examples
-          for (var a = 0; a < $scope.wordsData[i].examples.length; a++) {
-            for (var s = 0; s < $scope.examples.length; s++) {
-              if (($scope.examples[s].exampleId == ($scope.wordsData[i].examples[
-                  a]).substr(4, 2)) && ($scope.examples[s].functionalityId ==
-                  ($scope.wordsData[i].examples[a]).substr(2, 2)) && (
-                  $scope.examples[s].requirementId == ($scope.wordsData[i]
-                    .examples[a]).substr(0, 2))) {
-                $scope.exampleLinks.push($scope.examples[s]);
-              }
-            }
-          }
-        }
-      }
-      $scope.wordSelected = true;
-      $route.reload();
     }
 
     $scope.selectResult = function(step, item) {
@@ -118,6 +123,20 @@ app.controller('topicsController', ['$scope', '$location', 'services', 'words',
           break;
       }
       $scope.selectTab();
+    }
+
+    $scope.editWordle = function() {
+      $scope.requirementLinks = [];
+      $scope.functionalityLinks = [];
+      $scope.exampleLinks = [];
+
+      return ($uibModal.open({
+        templateUrl: './views/admin/wordle_edit.html',
+        scope: $scope
+      }).result.then(function() {
+
+      }))
+
     }
 
   }
