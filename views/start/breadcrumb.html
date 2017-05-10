@@ -1,12 +1,13 @@
 <div class="row">
+  <a class="btn btn-danger" href="requirements" ng-click="selectBreadcrumb(1)"><i class="fa fa-home fa-3x"></i></a>
   <div class="btn-group btn-breadcrumb">
-    <a ng-repeat="breadcrumb in breadcrumbs | limitTo: chain.step-1" href="{{breadcrumb.url}}" class="btn btn-danger" ng-click="selectBreadcrumb(breadcrumb)" ng-bind-html="breadcrumb.label"></a>
+    <a ng-repeat="breadcrumb in breadcrumbs | limitTo: chain.step-1" href="{{breadcrumb.url}}" class="btn btn-danger" ng-click="selectBreadcrumb(breadcrumb.step)" ng-bind-html="breadcrumb.label"></a>
   </div>
   <div class="row">
-    <div class="col-lg-4" ng-bind-html="chain.requirement.requirementId + '.' + chain.requirement.description">
+    <div ng-if="chain.requirement.requirementId" class="col-lg-4" ng-bind-html="chain.requirement.requirementId + '.' + chain.requirement.description">
     </div>
-    <div class="col-lg-4" ng-bind-html="chain.functionality.functionalityId + '.' + chain.functionality.description">
+    <div ng-if="chain.functionality.functionalityId" class="col-lg-4" ng-bind-html="chain.functionality.functionalityId + '.' + chain.functionality.description">
     </div>
-    <div class="col-lg-4" ng-bind-html="chain.example.exampleId + '.' + chain.example.title">
+    <div ng-if="chain.example.exampleId" class="col-lg-4" ng-bind-html="chain.example.exampleId + '.' + chain.example.title">
     </div>
   </div>

@@ -20,8 +20,8 @@ app.controller('mainController', ['$scope', '$rootScope', '$route', 'services',
       $scope.functionalitiesList = data.data;
     });
 
-    $scope.selectBreadcrumb = function(breadcrumb) {
-      $scope.chain.step = breadcrumb.step;
+    $scope.selectBreadcrumb = function(step) {
+      $scope.chain.step = step;
     };
 
     $scope.selectRequirement = function(requirement) {

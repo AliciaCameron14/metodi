@@ -129,22 +129,21 @@ app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
       $scope.editMode = !$scope.editMode;
     };
 
-    //In a way, the breadcrumbs are "one step behind"
     steps.breadcrumbs = [{
       //on Functionaliteit page
-      url: 'requirements',
-      label: 'Requirement',
-      step: 1
-    }, {
-      //on Basis page
       url: 'requirements/functionalities',
-      label: 'Functionaliteit',
+      label: 'Requirement',
       step: 2
     }, {
-      //on Voorbeeld page
+      //on Basis page
       url: 'requirements/functionalities/basis',
-      label: 'Voorbeeld',
+      label: 'Functionaliteit',
       step: 3
+    }, {
+      //on Voorbeeld page
+      url: 'requirements/functionalities/basis/example',
+      label: 'Voorbeeld',
+      step:4
     }];
 
     $scope.tabs = [{
