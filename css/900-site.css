@@ -1,4 +1,14 @@
 /*Classes*/
+.margin-left-sm {
+  margin-left:5px;
+}
+
+.margin-bottom-sm {
+  margin-bottom:5px;
+}
+.margin-top-sm {
+  margin-top:20px;
+}
 
 .menu {
     padding-top: 20px;
@@ -73,10 +83,6 @@ td .fa-times-circle {
 
 .carousel .fa-times-circle {
   color: #f23737;
-  /*position: absolute;*/
-    /*top: 30px;
-    right:0px;
-    z-index: 1;*/
 }
 
 
@@ -243,12 +249,9 @@ a {
 /*Carousel*/
 /*#carousel {
   height: 500px;
-
 }
 
-
 .carousel-inner > .item > img {
-
     margin: auto;
 }*/
 
@@ -274,8 +277,6 @@ a {
   color: #222222;
   background-image: none;
 }
-
-
 
 /*Breadcrumbs*/
 .btn-breadcrumb .btn:after {
@@ -307,25 +308,6 @@ a {
   left: 100%;
   z-index: 3;
 }
-
-/*Word Cloud*/
-
-/*wordcloud text{
-  font-size:20px !important;
-}*/
-
-/*wordcloud text:nth-child(2n) {
-  font-size:3em !important;
-}
-
-wordcloud text:nth-child(3n) {
-  font-size:5em !important;
-
-}
-wordcloud text:nth-child(5n) {
-  font-size:2em !important;
-
-}*/
 
 
 /** The Spacing **/

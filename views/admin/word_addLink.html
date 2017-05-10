@@ -1,0 +1,29 @@
+<form name="form" novalidate class="">
+  <div class="modal-header"><strong>Edit Word</strong></div>
+  <div class="modal-body">
+    <strong>Add Link</strong>
+    <div>
+      {{selected}}
+    </div>
+    <div class="form-group row">
+      <div class="col-lg-8 col-md-8 col-sm-8">
+        <select ng-if="linkType == 1" class="form-control" ng-model="item.selected">
+              <option ng-selected value="">Kies opsie...</option>
+              <option ng-repeat="link in availableRequirements" ng-value="{{link}}">{{link.requirementId + ' ' + link.description}}</option>
+            </select>
+        <select ng-if="linkType == 2" class="form-control" ng-model="item.selected">
+              <option ng-selected value="">Kies opsie...</option>
+              <option ng-repeat="link in availableFunctionalities" ng-value="{{link}}">{{link.requirementId + link.functionalityId + ' ' + link.description}}</option>
+            </select>
+        <select ng-if="linkType == 3" class="form-control" ng-model="item.selected">
+              <option ng-selected value="">Kies opsie...</option>
+              <option ng-repeat="link in availableExamples" ng-value="{{link}}">{{link.requirementId + link.functionalityId + link.exampleId + ' ' + link.title}}</option>
+            </select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" type="submit" ng-click="form.$valid?$close():0">Opslaan</button>
+    <button class="btn btn-default" type="button" ng-click="$dismiss()">Terug</button>
+  </div>
+</form>

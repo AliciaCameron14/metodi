@@ -1,9 +1,9 @@
+<!--TODO Make search page prettier!  -->
 <div class="col-lg-11">
   <form class="well form-search">
   		<label>Search:</label>
   		<input type="text" ng-model="search" class="input-medium search-query" placeholder="Keywords...">
   		<button type="submit" class="btn" ng-click="searchContent()">Search</button>
-  		<!-- <p class="help-block">Try for example: "php" or "angularjs" or "asdfg"</p> -->
   </form>
 
   <div ng-if="requirementResults.length">
@@ -26,7 +26,4 @@
   <a href=""  ng-click="selectResult(4, ex)"><b> {{ex.requirementId + " " + ex.functionalityId + " " + ex.exampleId }}</b>  {{ex.title}}</a>
   </div>
 </div>
-
-
-
 </div>

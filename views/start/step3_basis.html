@@ -1,5 +1,5 @@
-<hr class="col-lg-12"/>
-<div  style="float:right;" class="col-lg-1 "><span uib-tooltip="{{basisTip}}"  tooltip-placement="top" class="fa fa-lg fa-question-circle"></span></div>
+<hr class="col-lg-12" />
+<div style="float:right;" class="col-lg-1 "><span uib-tooltip="{{basisTip}}" tooltip-placement="top" class="fa fa-lg fa-question-circle"></span></div>
 
 <div class="row">
   <div class="text-center sectionHeading col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-sm-2 col-md-2 col-lg-2">
@@ -12,11 +12,11 @@
     <span ng-bind-html="chain.functionality.framework"></span>
 
     <h4>Richtlijnen:</h4>
-      <span ng-bind-html="chain.functionality.guideline"></span>
+    <span ng-bind-html="chain.functionality.guideline"></span>
 
-<div ng-if="user.userType == 0 && editMode" >
-    <i style="float:right;" class="btn fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editBasisprincipe(chain.functionality) " aria-hidden="true"></i>
-</div>
+    <div ng-if="user.userType == 0 && editMode">
+      <i style="float:right;" class="btn fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editBasisprincipe(chain.functionality) " aria-hidden="true"></i>
+    </div>
   </div>
 </div>
 
@@ -32,38 +32,38 @@
   </div>
 
   <div class="col-lg-10 shadow tableContainer">
-  <table class="col-lg-12">
-    <tr>
-      <th>
-        Nr.
-      </th>
-      <th>
-        Titel
-      </th>
-      <th>
-        Doelgroep
-      </th>
-      <th>
-        Actie
-      </th>
-    </tr>
-    <tr ng-repeat="example in allExamples">
-      <td>
-        <span ng-bind-html="example.exampleId"></span>
-      </td>
-      <td>
-        <span ng-bind-html="example.title"></span>
-  <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteExample(example) " aria-hidden="true" ></i>
- <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editExample(example) " aria-hidden="true"></i>
-      </td>
-  <td>
-    <span ng-bind-html="example.targetGroup"></span>
-  </td>
-      <td class="tdBtn">
-        <a href="#" class="btn btn-primary" ng-click="selectExample(example)">Openen</a>
-      </td>
-    </tr>
-  </table>
+    <table class="col-lg-12">
+      <tr>
+        <th>
+          Nr.
+        </th>
+        <th>
+          Titel
+        </th>
+        <th>
+          Doelgroep
+        </th>
+        <th>
+          Actie
+        </th>
+      </tr>
+      <tr ng-repeat="example in allExamples">
+        <td>
+          <span ng-bind-html="example.exampleId"></span>
+        </td>
+        <td>
+          <span ng-bind-html="example.title"></span>
+          <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteExample(example) " aria-hidden="true"></i>
+          <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editExample(example) " aria-hidden="true"></i>
+        </td>
+        <td>
+          <span ng-bind-html="example.targetGroup"></span>
+        </td>
+        <td class="tdBtn">
+          <a href="#" class="btn btn-primary" ng-click="selectExample(example)">Openen</a>
+        </td>
+      </tr>
+    </table>
   </div>
 </div>
 
@@ -79,32 +79,32 @@
   </div>
 
   <div class="col-lg-10 shadow tableContainer">
-  <table class="col-lg-12">
-    <tr>
-      <th>
-        Functionaliteit
-      </th>
-      <th>
-        Requirement
-      </th>
-      <th>
-        Actie
-      </th>
-    </tr>
-    <tr ng-repeat="link in chain.functionality.links" >
-      <td>
-        <span>{{link.substr(link.indexOf('F'))}}</span>
+    <table class="col-lg-12">
+      <tr>
+        <th>
+          Functionaliteit
+        </th>
+        <th>
+          Requirement
+        </th>
+        <th>
+          Actie
+        </th>
+      </tr>
+      <tr ng-repeat="link in chain.functionality.links">
+        <td>
+          <span>{{link.substr(link.indexOf('F'))}}</span>
 
-   <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteFuncLink(link) " aria-hidden="true"></i>
-      </td>
-  <td>
-    <span>{{link.substring(0, link.indexOf('F'))}}</span>
+          <i ng-if="user.userType == 0 && editMode" class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteFuncLink(link) " aria-hidden="true"></i>
+        </td>
+        <td>
+          <span>{{link.substring(0, link.indexOf('F'))}}</span>
 
-  </td>
-      <td class="tdBtn">
+        </td>
+        <td class="tdBtn">
           <a href="#" class="btn btn-primary" ng-click="selectLink(link)">Openen</a>
-      </td>
-    </tr>
-  </table>
+        </td>
+      </tr>
+    </table>
   </div>
 </div>

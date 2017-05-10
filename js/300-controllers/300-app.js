@@ -3,7 +3,6 @@ app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
   function($scope, $rootScope, $routeSegment, $location, services, $route,
     steps, wordle, Idle, $uibModal) {
 
-
     $scope.getCurrent = function() {
       services.getCurrentUser().then(function(data) {
 
@@ -81,13 +80,10 @@ app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
           };
           steps.chain.step = 1;
           Idle.watch();
-
           $location.path('/requirements');
-
           $scope.selectTab();
         }
       });
-
       $scope.editMode = false;
     };
 
@@ -111,7 +107,7 @@ app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
         .result.then(function() {
           $scope.item['userType'] = 1;
           services.addNewUser($scope.item).then(function(data) {
-            //login new user
+            //TODO: login new user immediately after register
           });
         }));
     };

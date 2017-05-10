@@ -1,0 +1,63 @@
+<form name="form" novalidate>
+  <div class="modal-header"><strong>Edit Word</strong></div>
+  <div class="modal-body">
+    <div class="form-group">
+      <div>
+        <h3>{{item.word}}</h3>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 margin-top-sm">
+          <strong>Requirement Links</strong>
+        </div>
+        <div ng-if="requirementLinks.length >= 1" class="">
+          <div ng-repeat="reqLink in requirementLinks" class="row margin-bottom-sm">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="col-lg-10 col-md-10 col-sm-10">
+                <input type="text" value="{{reqLink.requirementId + ' ' + reqLink.description}}" class="form-control" readonly/>
+              </div>
+              <button class="col-lg-1 col-md-1 col-sm-1 btn btn-danger" ng-click="removeLink(1, reqLink)"><i class="fa fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <button class="col-lg-1 col-md-1 col-sm-1 btn btn-success" ng-click="addLink(1)"><i class="fa fa-plus"></i></button>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 margin-top-sm">
+          <strong>Functionality Links</strong>
+        </div>
+        <div ng-if="functionalityLinks.length >= 1">
+          <div ng-repeat="funcLink in functionalityLinks" class="row margin-bottom-sm">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="col-lg-10 col-md-10 col-sm-10">
+                <input type="text" value="{{funcLink.requirementId + funcLink.functionalityId + ' ' + funcLink.description}}" class="form-control" readonly/>
+              </div>
+              <button class="col-lg-1 col-md-1 col-sm-1 btn btn-danger" ng-click="removeLink(2, funcLink)"><i class="fa fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <button class="col-lg-1 col-md-1 col-sm-1 btn btn-success" ng-click="addLink(2)"><i class="fa fa-plus"></i></button>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 margin-top-sm">
+          <strong>Example Links</strong>
+        </div>
+
+        <div ng-if="exampleLinks.length >= 1">
+          <div ng-repeat="exLink in exampleLinks" class="row margin-bottom-sm">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="col-lg-10 col-md-10 col-sm-10">
+                <input type="text" value="  {{exLink.requirementId + exLink.functionalityId + exLink.exampleId + ' ' + exLink.title}}" class="form-control" readonly/>
+              </div>
+              <button class="col-lg-1 col-md-1 col-sm-1 btn btn-danger" ng-click="removeLink(3, exLink)"><i class="fa fa-trash"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <button class="col-lg-1 col-md-1 col-sm-1 btn btn-success" ng-click="addLink(3)"><i class="fa fa-plus"></i></button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" type="submit" ng-click="form.$valid?$close():0">Opslaan</button>
+        <button class="btn btn-default" type="button" ng-click="$dismiss()">Terug</button>
+      </div>
+</form>

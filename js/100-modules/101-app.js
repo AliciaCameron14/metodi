@@ -48,7 +48,6 @@ app.factory("services", ['$http', function($http) {
       });
   };
 
-
   obj.getRequirements = function(id) {
     return $http.post(serviceBase + 'getRequirements', id).then(
       function(results) {
@@ -62,7 +61,6 @@ app.factory("services", ['$http', function($http) {
         return results;
       });
   };
-
 
   obj.getExamples = function(functionality) {
     return $http.post(serviceBase + 'getExamples', functionality).then(
@@ -95,9 +93,6 @@ app.factory("services", ['$http', function($http) {
   obj.getWords = function() {
     return $http.get(serviceBase + 'getWords');
   };
-  // obj.getCustomer = function(customerID){
-  //     return $http.get(serviceBase + 'customer?id=' + customerID);
-  // }
 
   obj.addNewUser = function(user) {
     return $http.post(serviceBase + 'insertUser', user).then(function(
@@ -198,17 +193,29 @@ app.factory("services", ['$http', function($http) {
       });
   };
 
-  // obj.updateCustomer = function (id,customer) {
-  //     return $http.post(serviceBase + 'updateCustomer', {id:id, customer:customer}).then(function (status) {
-  //         return status.data;
-  //     });
-  // };
-  //
-  // obj.deleteCustomer = function (id) {
-  //     return $http.delete(serviceBase + 'deleteCustomer?id=' + id).then(function (status) {
-  //         return status.data;
-  //     });
-  // };
+  obj.addWord = function(word) {
+    return $http.post(serviceBase + 'addWord', word).then(
+      function(
+        results) {
+        return results;
+      });
+  };
+
+  obj.removeWord = function(word) {
+    return $http.post(serviceBase + 'removeWord', word).then(
+      function(
+        results) {
+        return results;
+      });
+  };
+
+  obj.editWord = function(word) {
+    return $http.post(serviceBase + 'editWord', word).then(
+      function(
+        results) {
+        return results;
+      });
+  };
 
   return obj;
 
@@ -249,8 +256,6 @@ app.service('steps', ['$rootScope', 'services', function($rootScope, services) {
     getChainData: getChainData,
     getRequirements: getRequirements
   };
-
-
 }]);
 
 app.service('wordle', ['$rootScope', 'services', function($rootScope, services) {

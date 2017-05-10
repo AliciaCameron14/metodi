@@ -1,4 +1,4 @@
-//Split into separate controllers?
+//TODO: Split into separate controllers?
 
 app.controller('mainController', ['$scope', '$rootScope', '$route', 'services',
   '$location', 'steps', 'chain', 'requirements', '$uibModal',
@@ -52,7 +52,6 @@ app.controller('mainController', ['$scope', '$rootScope', '$route', 'services',
         templateUrl: './views/start/image.html',
         scope: $scope,
         windowClass: 'img-modal'
-
       }))
     };
 
@@ -407,7 +406,6 @@ app.controller('mainController', ['$scope', '$rootScope', '$route', 'services',
     $scope.deleteFuncLink = function(link) {
       $scope.link = link;
       $scope.item = angular.copy($scope.chain.functionality);
-      // $scope.links = $scope.chain.functionality.links;
 
       return ($uibModal.open({
         templateUrl: './views/admin/functionalityLink_delete.html',
@@ -418,7 +416,6 @@ app.controller('mainController', ['$scope', '$rootScope', '$route', 'services',
             $scope.item.links.splice(i, 1);
           }
         }
-        // $scope.chain.functionality.links = $scope.links;
         services.editFunctionalityLinks($scope.item).then(function(
           data) {
           $scope.chain.functionality = data.data[0];
@@ -444,7 +441,8 @@ app.controller('mainController', ['$scope', '$rootScope', '$route', 'services',
       }
 
       for (var k = 0; k < $scope.functionalitiesList.length; k++) {
-        if ($scope.functionalitiesList[k].requirementId == reqId && $scope.functionalitiesList[k].functionalityId == funcId) {
+        if ($scope.functionalitiesList[k].requirementId == reqId &&
+          $scope.functionalitiesList[k].functionalityId == funcId) {
           chain.functionality = $scope.functionalitiesList[k];
         }
       }
@@ -490,10 +488,8 @@ app.controller('mainController', ['$scope', '$rootScope', '$route', 'services',
           break;
 
         default:
-          // services.updateChain($scope.chain);
       }
     }
     $scope.$watch('chain.step', watchChain);
-
   }
 ]);

@@ -32,27 +32,28 @@ app.controller('loginController', ['$scope', '$location', '$rootScope',
     //        $scope.modal.close();
     //    };
 
-    $scope.register = function() {
-
-      $scope.item = {};
-
-      return ($uibModal.open({
-          templateUrl: './views/login/register.html',
-          scope: $scope
-        })
-        .result.then(function() {
-          // console.dir($scope.item);
-          $scope.item['userType'] = 1;
-
-          services.addNewUser($scope.item).then(function(data) {
-            // console.log(data);
-            //login new user
-          });
-        }));
-    };
+    // $scope.register = function() {
+    //
+    //   $scope.item = {};
+    //
+    //   return ($uibModal.open({
+    //       templateUrl: './views/login/register.html',
+    //       scope: $scope
+    //     })
+    //     .result.then(function() {
+    //       // console.dir($scope.item);
+    //       $scope.item['userType'] = 1;
+    //
+    //       services.addNewUser($scope.item).then(function(data) {
+    //         // console.log(data);
+    //         //login new user
+    //       });
+    //     }));
+    // };
   }
 ]);
 
+//TODO:
 //app.controller('forgotPasswordController', ['$scope', '$modal', 'server',  function ($scope, $modal, server)
 //{
 //   $scope.confirm = function ()

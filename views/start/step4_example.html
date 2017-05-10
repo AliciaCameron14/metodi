@@ -1,6 +1,6 @@
-<hr class="col-lg-12"/>
+<hr class="col-lg-12" />
 
-<div class="titleBox col-lg-11" >
+<div class="titleBox col-lg-11">
   <b><i>"Voorbeeld {{chain.example.exampleId | limitTo:1:1}}: {{chain.example.title}}"</i></b>
 </div>
 
@@ -13,17 +13,11 @@
 
 </div>
 
-<div id="carousel" class="col-lg-9 col-lg-offset-1 carousel slide" data-interval="false" data-ride="carousel" >
-  <!-- Indicators -->
-  <!-- <ol class="carousel-indicators">
-    <li data-target="#carousel" data-slide-to="0" class="active"></li>
-    <li data-target="#carousel" data-slide-to="1"></li>
-    <li data-target="#carousel" data-slide-to="2"></li>
-  </ol> -->
+<div id="carousel" class="col-lg-9 col-lg-offset-1 carousel slide" data-interval="false" data-ride="carousel">
 
   <div ng-if="user.userType == 0 && editMode" class="col-lg-6">
     <i class="btn fa fa-2x fa-plus-circle" ng-click="addExampleImg(chain.example)" aria-hidden="true"></i> add image
-    <i class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteExampleImg(chain.example) " aria-hidden="true" ></i> remove image
+    <i class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteExampleImg(chain.example) " aria-hidden="true"></i> remove image
   </div>
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">

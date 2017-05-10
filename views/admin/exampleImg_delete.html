@@ -1,18 +1,17 @@
 <form name="form" novalidate>
-    <div class="modal-header"><strong>Bewerk Voorbeeld</strong></div>
-    <div class="modal-body">
-          <strong>{{item.requirementId + " " + item.functionalityId + " " +item.exampleId}}</strong>
-        <div class="form-group">
-            <label>Images</label>
-
-<div ng-repeat="img in images">
-  <img class="smallImg" ng-src="{{ img && './content/'+item.path +'/'+img || './content/none.gif'}}" alt="" ng-click="viewImage(img)"> <button type="button" class="btn btn-danger fa fa-trash" ng-click="deleteImg(img)"> </button>
-</div>
-
-        </div>
+  <div class="modal-header"><strong>Bewerk Voorbeeld</strong></div>
+  <div class="modal-body">
+    <strong>{{item.requirementId + " " + item.functionalityId + " " +item.exampleId}}</strong>
+    <div class="form-group">
+      <label>Images</label>
+      <div ng-repeat="img in images">
+        <img class="smallImg" ng-src="{{ img && './content/'+item.path +'/'+img || './content/none.gif'}}" alt="" ng-click="viewImage(img)">
+        <button type="button" class="btn btn-danger fa fa-trash" ng-click="deleteImg(img)"> </button>
+      </div>
     </div>
-    <div class="modal-footer">
-        <button class="btn btn-success" type="submit" ng-click="form.$valid?$close():0">Gedaan</button>
-        <button class="btn btn-default" type="button" ng-click="$dismiss()">Terug</button>
-    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" type="submit" ng-click="form.$valid?$close():0">Gedaan</button>
+    <button class="btn btn-default" type="button" ng-click="$dismiss()">Terug</button>
+  </div>
 </form>

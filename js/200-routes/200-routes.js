@@ -1,7 +1,6 @@
 app.config(['$routeSegmentProvider', '$routeProvider', '$locationProvider' , function ($routeSegmentProvider, $routeProvider, $locationProvider)
     {
         $routeSegmentProvider
-      //  .when('/','home'),
             .when('/requirements', 'requirements')
             .when('/requirements/functionalities', 'requirements.functionalities')
             .when('/requirements/functionalities/basis', 'requirements.functionalities.basis')
@@ -9,15 +8,6 @@ app.config(['$routeSegmentProvider', '$routeProvider', '$locationProvider' , fun
             .when('/search', 'search')
             .when('/topics', 'topics')
 
-            // .segment('home', {
-                // templateUrl: 'index.html'
-                // controller: 'mainController'
-            // })
-        // .segment('start', {
-        //   templateUrl: './views/start/step1_requirements.html',
-        //     controller: 'mainController'
-        // })
-            // .within()
             .segment('requirements', {
                 templateUrl: './views/start/main.html',
                 controller: 'mainController',
@@ -32,16 +22,16 @@ app.config(['$routeSegmentProvider', '$routeProvider', '$locationProvider' , fun
             })
             .within()
             .segment('functionalities', {
-                // templateUrl: './views/start/step2_functionalities.html'
-                // controller: 'mainController'
+                // templateUrl:
+                // controller:
             }).within()
             .segment('basis', {
-                // templateUrl: './views/start/step3_basis.php',
-                // controller: 'mainController'
+                // templateUrl:
+                // controller:
             }).within()
             .segment('example', {
-                // templateUrl: './views/start/step4_example.php',
-                // controller: 'mainController'
+                // templateUrl:
+                // controller:
             })
             .up() .up() .up()//start
             .segment('search', {
@@ -57,11 +47,6 @@ app.config(['$routeSegmentProvider', '$routeProvider', '$locationProvider' , fun
                   }
                 }
             });
-            // .segment('redirect', {
-            //   default: true,
-            //   templateUrl: '<h1><LADEN.../h1>',
-            //   controller: 'redirectController'
-            // });
                $routeProvider.otherwise({redirectTo: '/'});
         $locationProvider.html5Mode(true).hashPrefix('!');
 }]);

@@ -1,6 +1,5 @@
 app.controller('searchController', ['$scope', '$location', 'services', function(
-  $scope, $location,
-  services) {
+  $scope, $location, services) {
 
   services.getRequirements().then(
     function(data) {
@@ -83,7 +82,8 @@ app.controller('searchController', ['$scope', '$location', 'services', function(
             chain.functionality = $scope.functionalities[i];
 
             for (var j = 0; j < $scope.requirements.length; j++) {
-              if ($scope.requirements[j].requirementId == $scope.functionalities[i].requirementId ) {
+              if ($scope.requirements[j].requirementId == $scope.functionalities[
+                  i].requirementId) {
                 chain.requirement = $scope.requirements[j];
               }
             }
@@ -94,7 +94,7 @@ app.controller('searchController', ['$scope', '$location', 'services', function(
         $location.path('/requirements/functionalities/basis/example');
         break;
     }
-$scope.selectTab();
+    $scope.selectTab();
   }
 
 

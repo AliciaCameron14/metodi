@@ -6,7 +6,7 @@
         <title>MeToDi</title>
         <base href="/metodi/">
 
-        <!-- To Do: Batch load -->
+        <!-- TODO: Batch load -->
         <!-- Include JS Scripts  -->
         <!-- Libraries-->
         <script src="./js/000-lib/000-jquery-2.2.1.min.js"></script>
@@ -72,11 +72,11 @@
                                 <a ng-href={{tab.url}} ng-click="setSelectedTab(tab)">{{tab.label}}</a>
                             </li>
                         </ul>
-                        <div ng-if="user.userType == 0" style="float:right;" >
+                        <div ng-if="user.userType == 0" style="z-index:1; float:right;" >
                           Edit Mode <toggle ng-model="editMode" ng-change="toggleEditMode()"></toggle>
                         </div>
 
-                        <div class="col-lg-11 col-lg-offset-1" app-view-segment="0"></div>
+                        <div class="col-lg-11 col-md-11 col-sm-11 col-lg-offset-1 col-md-offset-1 col-sm-offset-1" app-view-segment="0"></div>
                     </div>
                 </div>
 

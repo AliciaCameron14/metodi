@@ -22,7 +22,7 @@
 			echo $data;
 			exit;
 		}
-		// For a list of http codes checkout http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+		// http codes
 		private function get_status_message(){
 			$status = array(
 						200 => 'OK',

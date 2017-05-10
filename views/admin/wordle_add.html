@@ -1,0 +1,16 @@
+<form name="form" novalidate class="">
+  <div class="modal-header"><strong>Edit Wordle</strong></div>
+  <div class="modal-body">
+
+    <strong>Nuwe Woord</strong>
+    <div class="form-group row">
+      <div class="col-lg-8 col-md-8 col-sm-8">
+        <input type="text" class="form-control" ng-model="item.word" />
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" type="submit" ng-click="form.$valid?$close():0">Opslaan</button>
+    <button class="btn btn-default" type="button" ng-click="$dismiss()">Terug</button>
+  </div>
+</form>
