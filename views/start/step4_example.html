@@ -1,42 +1,53 @@
-<hr class="col-lg-12" />
+<hr class="col-lg-12 col-md-12 col-sm-12" />
 
-<div class="titleBox col-lg-11">
-  <b><i>"Voorbeeld {{chain.example.exampleId | limitTo:1:1}}: {{chain.example.title}}"</i></b>
+
+<div class="row">
+  <br />
 </div>
 
-<div class="tableContainer col-lg-11">
-  <div style="float:right;" ng-if="user.userType == 0 && editMode">
-    <i class="fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editExampleDesc(chain.example) " aria-hidden="true"></i>
-  </div>
-  <div ng-bind-html="chain.example.description" class="col-lg-12"></div>
-
-
+<div class="row panel panel-default">
+  <div class="panel-heading sectionHeading">Voorbeelden</div>
+  <div class="panel-body titleBox col-lg-12 col-md-12 col-sm-12">
+     <b><i>"Voorbeeld {{chain.example.exampleId | limitTo:1:1}}: {{chain.example.title}}"</i></b>
+   </div>
 </div>
 
-<div id="carousel" class="col-lg-9 col-lg-offset-1 carousel slide" data-interval="false" data-ride="carousel">
+<div class="row panel panel-default">
+  <div class="panel-heading sectionHeading">Omschrijving</div>
+  <div class="panel-body col-lg-12 col-md-12 col-sm-12">
+    <div style="float:right;" ng-if="user.userType == 0 && editMode">
+      <i class="fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editExampleDesc(chain.example) " aria-hidden="true"></i>
+    </div>
+    <div ng-bind-html="chain.example.description" ></div></div>
+</div>
 
-  <div ng-if="user.userType == 0 && editMode" class="col-lg-6">
-    <i class="btn fa fa-2x fa-plus-circle" ng-click="addExampleImg(chain.example)" aria-hidden="true"></i> add image
-    <i class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteExampleImg(chain.example) " aria-hidden="true"></i> remove image
-  </div>
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner" role="listbox">
-    <div ng-repeat="img in chain.example.screenshot" class="item" ng-class="{active: $first}">
+<div class="row panel panel-default">
+  <div class="panel-heading sectionHeading">Afbeeldingen</div>
+  <div class="panel-body">
+    <div id="carousel" class="carousel slide" data-interval="false" data-ride="carousel">
+    <div ng-if="user.userType == 0 && editMode" class="col-lg-6">
+      <i class="btn fa fa-2x fa-plus-circle" ng-click="addExampleImg(chain.example)" aria-hidden="true"></i> add image
+      <i class="btn fa fa-2x fa-times-circle" ng-click="$event.stopPropagation(); deleteExampleImg(chain.example) " aria-hidden="true"></i> remove image
+    </div>
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+      <div ng-repeat="img in chain.example.screenshot" class="item" ng-class="{active: $first}">
 
-      <img ng-src="{{ img && './content/'+chain.example.path +'/'+img || './content/none.gif'}}" alt="" ng-click="viewImage(img)">
-      <div class="carousel-caption">
+        <img ng-src="{{ img && './content/'+chain.example.path +'/'+img || './content/none.gif'}}" alt="" ng-click="viewImage(img)">
+        <div class="carousel-caption">
+        </div>
       </div>
+
     </div>
 
-  </div>
-
-  <!-- Controls -->
-  <a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
-    <span class="fa fa-chevron-circle-left fa-3x" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#carousel" role="button" data-slide="next">
-    <span class="fa fa-chevron-circle-right fa-3x" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
+    <!-- Controls -->
+    <a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
+      <span class="fa fa-chevron-circle-left fa-3x" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#carousel" role="button" data-slide="next">
+      <span class="fa fa-chevron-circle-right fa-3x" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div></div>
 </div>

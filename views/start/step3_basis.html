@@ -1,13 +1,17 @@
-<hr class="col-lg-12" />
-<div style="float:right;" class="col-lg-1 "><span uib-tooltip="{{basisTip}}" tooltip-placement="top" class="fa fa-lg fa-question-circle"></span></div>
+<hr class="col-lg-12 col-md-12 col-sm-12" />
+
+
+<div style="float:right;" class=""><span uib-tooltip="{{basisTip}}" tooltip-placement="top" class="fa fa-lg fa-question-circle"></span></div>
 
 <div class="row">
-  <div class="text-center sectionHeading col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-sm-2 col-md-2 col-lg-2">
-    <p>
+  <br />
+</div>
+
+<div class="row panel panel-default">
+  <div class="panel-heading sectionHeading">
       Basisprincipe
-    </p>
   </div>
-  <div class="col-lg-10 roundContainer shadow">
+  <div class="panel-body">
     <h4>Kader:</h4>
     <span ng-bind-html="chain.functionality.framework"></span>
 
@@ -21,18 +25,16 @@
 </div>
 
 
-<div class="row">
-  <div class="text-center sectionHeading col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-sm-2 col-md-2 col-lg-2">
-    <p>
+<div class="row panel panel-default">
+  <div class="panel-heading sectionHeading">
       Voorbeelden
-    </p>
   </div>
-  <div ng-if="user.userType == 0 && editMode" class="col-lg-3">
+  <div ng-if="user.userType == 0 && editMode" class="col-lg-3 col-md-3 col-sm-3">
     <i class="btn fa fa-2x fa-plus-circle" ng-click="addExample()" aria-hidden="true"></i> add Voorbeelden
   </div>
 
-  <div class="col-lg-10 shadow tableContainer">
-    <table class="col-lg-12">
+  <div class="panel-body col-lg-12 col-md-12 col-sm-12 ">
+    <table class="col-lg-12 col-md-12 col-sm-12">
       <tr>
         <th>
           Nr.
@@ -68,18 +70,16 @@
 </div>
 
 
-<div class="row">
-  <div class="text-center sectionHeading col-sm-offset-1 col-md-offset-1 col-lg-offset-1 col-sm-3 col-md-3 col-lg-3">
-    <p>
+<div class="row panel panel-default">
+  <div class="panel-heading sectionHeading ">
       Bekijk ook zeker
-    </p>
   </div>
-  <div ng-if="user.userType == 0 && editMode" class="col-lg-3">
+  <div ng-if="user.userType == 0 && editMode" class="col-lg-3 col-md-3 col-sm-3">
     <i class="btn fa fa-2x fa-plus-circle" ng-click="addLink()" aria-hidden="true"></i> add link
   </div>
 
-  <div class="col-lg-10 shadow tableContainer">
-    <table class="col-lg-12">
+  <div class="panel-body col-lg-12 col-md-12 col-sm-12">
+    <table class="col-lg-12 col-md-12 col-sm-12">
       <tr>
         <th>
           Functionaliteit
@@ -99,7 +99,6 @@
         </td>
         <td>
           <span>{{link.substring(0, link.indexOf('F'))}}</span>
-
         </td>
         <td class="tdBtn">
           <a href="#" class="btn btn-primary" ng-click="selectLink(link)">Openen</a>

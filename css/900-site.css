@@ -6,8 +6,14 @@
 .margin-bottom-sm {
   margin-bottom:5px;
 }
+
 .margin-top-sm {
   margin-top:20px;
+}
+
+.btn-home {
+  padding: 11px 11px;
+  background-color: #bf3f3b;
 }
 
 .menu {
@@ -42,27 +48,33 @@
 }
 
 .block p:hover {
-    background-color: #d0cbcb;
+    background-color:  #d9534f;
     color: black;
+    border: 1px solid rgb(158, 158, 158);
+    cursor: pointer;
 }
 
 .block p {
     display: table-cell;
     vertical-align: middle;
      border-radius: 15px;
-    border: 2px solid #404040;
+    /*border: 2px solid #404040;*/
        padding: 10px;
 }
 
 .block .fa-times-circle {
-  color: #f23737;
+  color: #d9534f;
   position: absolute;
   top:0px;
   right:12px;
 }
 
+.block:hover .fa-times-circle {
+  color: #a22b28 !important;
+}
+
 .block .fa-pencil {
-  /*color: #f23737;*/
+  /*color: #d9534f;*/
   position: absolute;
   right:52px;
 }
@@ -78,11 +90,11 @@
 }
 
 td .fa-times-circle {
-    color: #f23737;
+    color: #d9534f;
 }
 
 .carousel .fa-times-circle {
-  color: #f23737;
+  color: #d9534f;
 }
 
 
@@ -109,15 +121,19 @@ td .fa-times-circle {
 }
 
 .sectionHeading {
-  border-top: 2px solid #404040;
+  /*border-top: 2px solid #404040;
   border-left: 2px solid #404040;
   border-right: 2px solid #404040;
   border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-  font-size: 2em;
-  padding: 3px;
-  display: table;
+  border-top-right-radius: 2px;*/
+  font-size: 20px;
+  padding: 10px;
+  /*display: table;*/
 
+}
+
+.panel {
+  margin-top: 20px;
 }
 
 .tableContainer {
@@ -132,7 +148,7 @@ td .fa-times-circle {
   border-radius: 10px;
   padding: 10px;
   background-color: #f4f4f4;
-  margin-bottom: 20px;
+
 }
 
 .shadow {
@@ -152,15 +168,15 @@ td .fa-times-circle {
 
 .tdBtn .btn-primary{
   color: black;
-  background-color:  white;
-  border-color: white;
+  /*background-color:  white;
+  border-color: white;*/
 }
 
 
 .tdBtn .btn-primary:hover {
   color: white;
-  background-color:  #f23737;
-  border-color: #f23737;
+  background-color:  #d9534f;
+  border-color: #d9534f;
   line-height: 1.42857143;
 }
 
@@ -169,12 +185,12 @@ td .fa-times-circle {
   border-color: #e6e6e6 !important;
 }*/
 
-.titleBox {
-  border: 1px solid black;
-  background-color: #70ccff;
+.panel-body.titleBox {
+  /*border: 1px solid black;*/
+  background-color: rgba(112, 204, 255, 0.3);
   padding: 10px;
-  margin-bottom: 20px;
-
+  padding-bottom: 15px;
+  padding-top: 15px;
 }
 
 .img-modal .modal-dialog {
@@ -200,7 +216,6 @@ td .fa-times-circle {
 }
 
 
-
 /*Elements*/
 
 table {
@@ -209,7 +224,7 @@ table {
 }
 
 table td {
-  border: 1px solid #555555;
+  border: 1px solid #7a7777;
   padding: 5px 15px 5px 15px;
 
 }
@@ -222,14 +237,19 @@ tr:nth-child(odd) {
   background: #e6e6e6 !important;
 }
 
+tr:nth-child(even) .btn {
+  background: #f5f5f5;
+  border-color: #f5f5f5;
+}
+
 tr:nth-child(odd) .btn {
   background: #e6e6e6;
   border-color: #e6e6e6;
 }
 
 table th {
-  background-color: #a19e9e;
-  border: 1px solid #555555;
+  background-color: #bababa;
+  border: 1px solid #7a7777;
   padding: 5px 15px 5px 15px;
 }
 
@@ -315,13 +335,34 @@ a {
   font-size: 15px;
     font-weight: bold;
   padding:15px 0px 15px 0px;
-  width: 375px;
+  /*width: 375px;*/
 }
 .btn-breadcrumb .btn:first-child {
-  /*padding:15px 140px 15px 140px;*/
+  background-color: #bf3f3b;
+border-color: #bf3f3b;
+}
+.btn-breadcrumb .btn:first-child:hover {
+  background-color: #ac2925;
+border-color: #ac2925;
+}
+
+
+.btn-breadcrumb .btn:nth-child(2){
+background-color: #d15552;
+border-color: #d15552;
+
+}
+.btn-breadcrumb .btn:nth-child(2):hover {
+  background-color: #ac2925;
+border-color: #ac2925;
 }
 .btn-breadcrumb .btn:last-child {
-  /*padding:15px 140px 15px 145px;*/
+  background-color: #e36b68;
+  border-color: #e36b68;
+}
+.btn-breadcrumb .btn:last-child:hover {
+  background-color: #ac2925;
+border-color: #ac2925;
 }
 
 /** Danger button **/
@@ -339,6 +380,45 @@ a {
 }
 
 
+.btn-breadcrumb .btn.btn-danger:first-child:before {
+  border-left: 10px solid #bf3f3b;
+}
+.btn-breadcrumb .btn.btn-danger:nth-child(2):before {
+  border-left: 10px solid #d15552;
+}
+.btn-breadcrumb .btn.btn-danger:last-child:before {
+  border-left: 10px solid #e36b68;
+}
+
+.btn-breadcrumb .btn.btn-danger:first-child:after {
+  border-left: 10px solid #bf3f3b;
+}
+.btn-breadcrumb .btn.btn-danger:nth-child(2):after {
+  border-left: 10px solid #d15552;
+}
+.btn-breadcrumb .btn.btn-danger:last-child:after {
+  border-left: 10px solid #e36b68;
+}
+
+.btn-breadcrumb .btn.btn-danger:first-child:hover:before{
+  border-left: 10px solid #bd2d28;
+}
+.btn-breadcrumb .btn.btn-danger:nth-child(2):hover:before {
+  border-left: 10px solid #bd2d28;
+}
+.btn-breadcrumb .btn.btn-danger:last-child:hover:before {
+  border-left: 10px solid #bd2d28;
+}
+
+.btn-breadcrumb .btn.btn-danger:first-child:hover:after{
+  border-left: 10px solid #bd2d28;
+}
+.btn-breadcrumb .btn.btn-danger:nth-child(2):hover:after {
+  border-left: 10px solid #bd2d28;
+}
+.btn-breadcrumb .btn.btn-danger:last-child:hover:after {
+  border-left: 10px solid #bd2d28;
+}
 /*Media Queries*/
 @media (max-width: 768px) {
     .block {
