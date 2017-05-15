@@ -82,6 +82,16 @@ app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
           $location.path('/requirements');
           $scope.selectTab();
         }
+        else {
+
+          $scope.error = {};
+          $scope.error.message = "Incorrect password or username.";
+          return ($uibModal.open({
+              templateUrl: './views/error.html',
+              scope: $scope
+            }).result.then(function(data) {
+            }));
+        }
       });
       $scope.editMode = false;
     };
@@ -126,12 +136,27 @@ app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
 
     $scope.forgotPassword = function() {
       $scope.item = {};
+
+
       return ($uibModal.open({
           templateUrl: './views/login/forgotPassword.html',
           scope: $scope
         })
         .result.then(function() {
           services.forgotPassword($scope.item).then(function(data) {
+            console.log(data);
+            if (data.status != "204") {
+
+            }
+            else {
+              $scope.error = {};
+              $scope.error.message = "No user found with that email address";
+              return ($uibModal.open({
+                  templateUrl: './views/error.html',
+                  scope: $scope
+                }).result.then(function(data) {
+                }));
+            }
 
           });
         }));

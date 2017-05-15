@@ -127,20 +127,74 @@ class API extends REST
                 $this->response('', 204);
             }
         }
-
-        $error = array(
-            'status' => "Failed",
-            "msg" => "Invalid Email address or Password"
-        );
-        $this->response($this->json($error), 400);
+        //
+        // $error = array(
+        //     'status' => "Failed",
+        //     "msg" => "Invalid Email address or Password"
+        // );
+        // $this->response($this->json($error), 400);
+          // $this->response('', 400);
     }
 
-    // private function forgotPassword()
-    // {
-    //   $emailAddress = json_decode(file_get_contents("php://input"), true);
-    //   FB::info($emailAddress);
-    //   $mail = new PHPMailer();
-    // }
+    private function forgotPassword()
+    {
+      if ($this->get_request_method() != "POST") {
+          $this->response('', 406);
+      }
+
+      $email = json_decode(file_get_contents("php://input"), true);
+      $emailAddress = $email['email'];
+
+      $query = $this->mysqli->prepare('SELECT id, firstName, familyName FROM userlogin WHERE email = ?');
+      $query->bind_param('s', $emailAddress);
+      $query->execute();
+      $r = $query->get_result();
+
+      if ($r->num_rows > 0)
+      {
+        $result = $r->fetch_assoc();
+
+        $newPassword = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 8);
+        $result['password'] = $newPassword;
+        FB::info($newPassword);
+
+        $user = $this->changePassword($result);
+
+        $this->updatePassword($user);
+        FB::info($user);
+
+        $mail = new PHPMailer();
+
+        $mail->isSMTP();
+        $mail->SMTPDebug = 3;
+        // $mail->Debugoutput = 'html';
+        $mail->Host = '197.221.2.16';
+        $mail->Port = 587;
+        // $mail->SMTPSecure = 'tls';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'mailer@belgiumcampus.ac.za'; // get Metodi email
+        $mail->Password = 'Mail2014'; // get password for ^ email
+        $mail->SMTPAutoTLS = false;
+        // $mail->setFrom('from@example.com', 'First Last'); // set the name that will be displayed when user receives the email
+        $mail->From = 'info@belgiumcampus.ac.za';
+        $mail->FromName = 'Metodi';
+        $mail->addAddress('cameronalicia@gmail.com');
+        $mail->Subject = 'Metodi Account Details';
+        $mail->Body = 'Name: ' . $user['firstName']. '
+Surname: ' . $user['familyName']. '
+New Password: ' . $newPassword;
+        // $mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
+        // $mail->AltBody = 'dadadadsadada';
+        // $mail->AltBody = 'Here is your password : '$temp;
+
+        if (!$mail->send()) {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+        } else {
+            echo "Message sent!";
+        }
+      }
+        else $this->response('', 204);
+    }
 
     private function getRequirements()
     {

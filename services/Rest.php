@@ -28,6 +28,7 @@
 						200 => 'OK',
 						201 => 'Created',
 						204 => 'No Content',
+						400 => 'Invalid Email address or Password',
 						404 => 'Not Found',
 						406 => 'Not Acceptable',
 					  500 => 'Internal Server Error');
