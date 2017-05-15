@@ -37,6 +37,7 @@
         <link rel="stylesheet" href="./css/020-font-awesome.min.css" type="text/css" />
         <link rel="stylesheet" href="./css/030-angular-bootstrap-toggle.min.css" type="text/css" />
         <link rel="stylesheet" href="./css/900-site.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
     </head>
 
@@ -56,7 +57,7 @@
                                 <div class="dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-lg fa-caret-down" aria-hidden="true"></i><strong ng-bind-html="user.firstName + ' ' + user.familyName"></strong></div>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="#">Account Settings</a>
+                                        <a href="#" ng-click="accountSettings()">Account Settings</a>
                                     </li>
                                     <li>
                                         <a href="#" ng-click="logout()">Logout</a>

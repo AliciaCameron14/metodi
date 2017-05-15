@@ -1,10 +1,10 @@
-<div class="col-lg-11" ng-if="!wordSelected">
+<div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" ng-if="!wordSelected">
   <div ng-if="user.userType == 0 && editMode" >
     <i class="btn fa fa-2x fa-pencil" ng-click="$event.stopPropagation(); editWordle() " aria-hidden="true"></i> edit wordle
   </div>
   <wordcloud words="words" on-click="selectWord(element.text)"></wordcloud>
 </div>
-<div class="col-lg-11"  ng-if="wordSelected">
+<div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" ng-if="wordSelected">
   <div ng-if="requirementLinks.length">
     <h3>Requirements</h3>
     <div ng-repeat="req in requirementLinks">

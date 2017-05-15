@@ -5,7 +5,6 @@ app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
 
     $scope.getCurrent = function() {
       services.getCurrentUser().then(function(data) {
-
         if (data.data) {
           $rootScope.user = data.data;
           $rootScope.userLoggedIn = true;
@@ -95,6 +94,19 @@ app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
         $location.path('/');
       });
       $scope.getCurrent();
+    };
+
+    $scope.accountSettings = function() {
+      $scope.item = angular.copy($scope.user);
+      return ($uibModal.open({
+          templateUrl: './views/login/accountSettings.html',
+          scope: $scope
+        }).result.then(function() {
+          services.editUser($scope.item).then(function(data) {
+            $scope.user = data.data;
+            $scope.getCurrent();
+          });
+        }));
     };
 
 

@@ -100,6 +100,12 @@ app.factory("services", ['$http', function($http) {
       return results;
     });
   };
+  obj.editUser = function(user) {
+    return $http.post(serviceBase + 'editUser', user).then(function(
+      results) {
+      return results;
+    });
+  };
 
   obj.editRequirement = function(req) {
     return $http.post(serviceBase + 'editRequirement', req).then(

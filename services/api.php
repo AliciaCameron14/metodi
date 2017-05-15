@@ -112,7 +112,7 @@ class API extends REST
                     $temp = base64_encode(hash_hmac('sha256', $password, $result['salt'], true));
 
                     //check
-                    $query = $this->mysqli->prepare('SELECT id, userType, email, firstName, familyName FROM userlogin WHERE email = ? AND password = ? LIMIT 1');
+                    $query = $this->mysqli->prepare('SELECT id, userType, email, firstName, familyName, jobDesc, organisationName, organisationAddress, organisationPostalCode, organisationEmail, organisationPhone FROM userlogin WHERE email = ? AND password = ? LIMIT 1');
                     $query->bind_param('ss', $email, $temp);
                     $query->execute();
                     $r = $query->get_result();
@@ -970,6 +970,65 @@ class API extends REST
             $this->response($this->json($success), 200);
         } else
             $this->response('', 500);
+    }
+
+    private function editUser()
+    {
+        if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+
+        $user = json_decode(file_get_contents("php://input"), true);
+        if (isset($user['password']))
+          {
+            $user = $this->changePassword($user);
+            $password = $user['password'];
+            $salt = $user['salt'];
+            $this->updatePassword($user);
+          }
+
+        $email = $user['email'];
+        $firstName = $user['firstName'];
+        $familyName = $user['familyName'];
+        $jobDesc = $user['jobDesc'];
+        $organisationName = $user['organisationName'];
+        $organisationAddress = $user['organisationAddress'];
+        $organisationPostalCode = $user['organisationPostalCode'];
+        $organisationEmail = $user['organisationEmail'];
+        $organisationPhone = $user['organisationPhone'];
+        $id = $user['id'];
+
+        $query = $this->mysqli->prepare('UPDATE userlogin SET email = ?,  firstName = ?, familyName = ?, jobDesc = ?,  organisationName = ?, organisationAddress = ?, organisationPostalCode = ?, organisationEmail = ?, organisationPhone = ? WHERE id = ?');
+
+          $query->bind_param('ssssssssss', $email, $firstName, $familyName, $jobDesc, $organisationName, $organisationAddress, $organisationPostalCode, $organisationEmail, $organisationPhone, $id );
+
+          $query->execute();
+          if ($this->mysqli->affected_rows >= 0) {
+
+            $query = $this->mysqli->prepare('SELECT id, userType, email, firstName, familyName, jobDesc, organisationName, organisationAddress, organisationPostalCode, organisationEmail, organisationPhone FROM userlogin WHERE id = ? LIMIT 1');
+            $query->bind_param('s', $id);
+            $query->execute();
+            $r = $query->get_result();
+
+            if ($r->num_rows > 0) {
+                $result = $r->fetch_assoc();
+                $this->setCurrentUser($result);
+                $this->response($this->json($result), 200); //send user details
+            }
+            $this->response('', 500);
+          }
+          $this->response('', 500);
+    }
+
+    private function updatePassword($user)
+    {
+      $query = $this->mysqli->prepare("UPDATE userlogin SET password = ?, salt = ? WHERE id = ? ");
+      $query->bind_param('sss', $user['password'], $user['salt'], $user['id']);
+      $query->execute();
+    //   if ($this->mysqli->affected_rows >= 0) {
+    //       return true;
+    //   }
+    // return false;
     }
 
        // Encode array into JSON
