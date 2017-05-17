@@ -159,33 +159,24 @@ class API extends REST
         FB::info($newPassword);
 
         $user = $this->changePassword($result);
-
         $this->updatePassword($user);
-        FB::info($user);
 
         $mail = new PHPMailer();
-
         $mail->isSMTP();
         $mail->SMTPDebug = 3;
-        // $mail->Debugoutput = 'html';
-        $mail->Host = '197.221.2.16';
-        $mail->Port = 587;
-        // $mail->SMTPSecure = 'tls';
+        $mail->Host = 'send.one.com';
+        $mail->Port = 465;
+        $mail->SMTPSecure = 'ssl';
         $mail->SMTPAuth = true;
-        $mail->Username = 'mailer@belgiumcampus.ac.za'; // get Metodi email
-        $mail->Password = 'Mail2014'; // get password for ^ email
-        $mail->SMTPAutoTLS = false;
-        // $mail->setFrom('from@example.com', 'First Last'); // set the name that will be displayed when user receives the email
-        $mail->From = 'info@belgiumcampus.ac.za';
+        $mail->Username = 'mailvergeten@metodi.be'; // get Metodi email
+        $mail->Password = 'DwIgOhM_01'; // get password for ^ email
+        $mail->From = 'mailvergeten@metodi.be';
         $mail->FromName = 'Metodi';
         $mail->addAddress('cameronalicia@gmail.com');
         $mail->Subject = 'Metodi Account Details';
-        $mail->Body = 'Name: ' . $user['firstName']. '
-Surname: ' . $user['familyName']. '
-New Password: ' . $newPassword;
-        // $mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
-        // $mail->AltBody = 'dadadadsadada';
-        // $mail->AltBody = 'Here is your password : '$temp;
+        $mail->Body = 'Voornaam: ' . $user['firstName']. '
+Naam: ' . $user['familyName']. '
+Nuwe Wachtwoord: ' . $newPassword;
 
         if (!$mail->send()) {
             echo "Mailer Error: " . $mail->ErrorInfo;
