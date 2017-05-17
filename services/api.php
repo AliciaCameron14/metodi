@@ -156,7 +156,6 @@ class API extends REST
 
         $newPassword = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 8);
         $result['password'] = $newPassword;
-        FB::info($newPassword);
 
         $user = $this->changePassword($result);
         $this->updatePassword($user);
@@ -172,7 +171,7 @@ class API extends REST
         $mail->Password = 'DwIgOhM_01'; // get password for ^ email
         $mail->From = 'mailvergeten@metodi.be';
         $mail->FromName = 'Metodi';
-        $mail->addAddress('cameronalicia@gmail.com');
+        $mail->addAddress($emailAddress);
         $mail->Subject = 'Metodi Account Details';
         $mail->Body = 'Voornaam: ' . $user['firstName']. '
 Naam: ' . $user['familyName']. '

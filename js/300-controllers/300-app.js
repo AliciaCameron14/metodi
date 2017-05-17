@@ -137,16 +137,20 @@ app.controller('appController', ['$scope', '$rootScope', '$routeSegment',
     $scope.forgotPassword = function() {
       $scope.item = {};
 
-
       return ($uibModal.open({
           templateUrl: './views/login/forgotPassword.html',
           scope: $scope
         })
         .result.then(function() {
           services.forgotPassword($scope.item).then(function(data) {
-            console.log(data);
             if (data.status != "204") {
-
+              $scope.info = {};
+              $scope.info.message = "Nuwe wachtwoord gestuur na " + $scope.item.email;
+              return ($uibModal.open({
+                  templateUrl: './views/info.html',
+                  scope: $scope
+                }).result.then(function(data) {
+                }));
             }
             else {
               $scope.error = {};

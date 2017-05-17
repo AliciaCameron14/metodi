@@ -45,7 +45,6 @@ app.controller('loginController', ['$scope', '$location', '$rootScope',
     //       $scope.item['userType'] = 1;
     //
     //       services.addNewUser($scope.item).then(function(data) {
-    //         // console.log(data);
     //         //login new user
     //       });
     //     }));
