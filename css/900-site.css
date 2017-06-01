@@ -101,8 +101,6 @@ td .fa-times-circle {
 .login {
     margin-top: 150px;
      border-radius: 15px;
-    border: 1px solid black;
-
 }
 
 .login .btn {
@@ -112,12 +110,13 @@ td .fa-times-circle {
 
 .login .btn-primary {
     color:black;
-    border:1px solid black;
+    border:1px solid #8a8989;
     background-color: #d9d9d9;
 }
 
 .login .btn-primary:hover {
-    background-color: #bfbfbf;
+    color: white;
+    background-color: #d9534f;;
 }
 
 .sectionHeading {

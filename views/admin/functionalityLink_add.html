@@ -3,11 +3,15 @@
   <div class="modal-body">
     <div class="form-group">
       <strong>Functionaliteit in common</strong>
-      <select class="form-control" ng-model="selected">
-            <option ng-selected value="">Kies functionaliteit...</option>
-            <option ng-repeat="func in allFunctionalities" ng-value="{{func}}">{{func.requirementId + func.functionalityId + ' ' + func.description}}</option>
-          </select>
-      <button class="btn btn-success" ng-click="addFuncLink(selected)"><i class="fa fa-plus"></i></button>
+      <div class="row">
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+          <select class=" form-control" ng-model="selected">
+                <option ng-selected value="">Kies functionaliteit...</option>
+                <option ng-repeat="func in allFunctionalities" ng-value="{{func}}">{{func.requirementId + func.functionalityId + ' ' + func.description}}</option>
+              </select>
+        </div>
+        <button class="col-lg-1 col-md-1 col-sm-1 col-xs-1 btn btn-success" ng-click="addFuncLink(selected)"><i class="fa fa-plus"></i></button>
+      </div>
     </div>
     <div ng-repeat="link in links">
       <input type="text" class="form-control" value="{{link.name + ' ' + link.desc}}" readonly />

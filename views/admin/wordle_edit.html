@@ -9,13 +9,15 @@
               <option ng-repeat="word in wordsData" ng-value="{{word}}">{{word.word}}</option>
             </select>
       </div>
-      <div class="col-lg-4 col-md-4 col-sm-4">
-        <button class="col-lg-3  btn btn-success" ng-click="addWord()"><i class="fa fa-plus"></i></button>
-        <div ng-if="selected">
-          <button class="margin-left-sm col-lg-3 btn btn-warning" ng-click="editWord(selected)"><i class="fa fa-edit"></i></button>
-          <button class="margin-left-sm col-lg-3 btn btn-danger" ng-click="removeWord(selected)"><i class="fa fa-trash"></i></button>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-7">
+                  <button class="col-lg-3 col-md-3 col-sm-3 col-xs-3 btn btn-success" ng-click="addWord()"><i class="fa fa-plus"></i></button>
+
+        <div class="" ng-show="selected">
+          <button class="col-lg-3 col-md-3 col-sm-3 col-xs-3  margin-left-sm btn btn-warning" ng-click="editWord(selected)"><i class="fa fa-edit"></i></button>
+          <button class="col-lg-3 col-md-3 col-sm-3 col-xs-3  margin-left-sm btn btn-danger" ng-click="removeWord(selected)"><i class="fa fa-trash"></i></button>
         </div>
-      </div>
+        </div>
+
     </div>
   </div>
   <div class="modal-footer">
